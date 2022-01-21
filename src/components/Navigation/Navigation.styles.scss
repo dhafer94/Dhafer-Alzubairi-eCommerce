@@ -1,0 +1,46 @@
+.navbar {
+	height: 5rem;
+	display: flex;
+	flex-wrap: wrap;
+
+	justify-content: space-between;
+	padding: 1.8rem 6.25rem;
+	// border: 1px solid #000;
+
+	& .navbar-categories-links {
+		/* Navigation */
+		/* Auto layout */
+
+		display: flex;
+		flex-direction: row;
+		align-items: flex-start;
+		justify-content: space-between;
+
+		width: 14.6rem;
+		height: 3.5rem;
+
+		list-style: none;
+		border-bottom: 1px solid #000;
+	}
+
+	& .navbar-logo {
+		/* a-logo */
+		width: 41px;
+		height: 41px;
+		align-self: center;
+	}
+
+	& .navbar-actions {
+		/* Actions */
+		/* Auto layout */
+
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+		align-items: center;
+		padding: 0px;
+
+		width: 204px;
+		height: 40px;
+	}
+}

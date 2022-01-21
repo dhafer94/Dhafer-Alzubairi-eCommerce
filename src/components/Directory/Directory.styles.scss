@@ -1,0 +1,30 @@
+.category-name {
+	// position: absolute;
+	width: fit-content;
+	height: 4.25rem;
+	// margin-left: ;
+	/* Heading / Desktop / H2 */
+	border: 1px solid #000;
+
+	// font-family: Raleway;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 40px;
+	line-height: 160%;
+	/* identical to box height, or 67px */
+
+	display: flex;
+	align-items: center;
+
+	/* --c-text */
+	color: #1d1f22;
+	margin: 20px auto 60px 6.25rem;
+}
+.directory-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	justify-content: center;
+	text-align: center;
+	gap: 40px;
+	padding: 0 6.25rem;
+}
