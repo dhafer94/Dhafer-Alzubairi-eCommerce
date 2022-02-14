@@ -22,9 +22,11 @@
 }
 .directory-container {
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
+	// grid-template-columns: 1fr 1fr 1fr;
+	grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
 	justify-content: center;
 	text-align: center;
 	gap: 40px;
 	padding: 0 6.25rem;
+	width: 90vw;
 }

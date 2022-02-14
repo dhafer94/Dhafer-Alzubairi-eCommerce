@@ -1,10 +1,14 @@
 import React, { PureComponent } from 'react';
 import './Directory.styles.scss';
 import ProductCard from '../ProductCard/ProductCard.Component';
+import { useNavigate } from 'react-router';
 
 class Directory extends PureComponent {
 	constructor(props) {
 		super(props);
+		// this.state = {
+		// 	products: [],
+		// };
 	}
 
 	render() {

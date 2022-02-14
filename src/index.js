@@ -6,18 +6,31 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Product from './pages/Product/Product.Component';
 import Cart from './pages/Cart/Cart.Component';
+import Category from './pages/Category/Category.Component';
+import Navigation from './components/Navigation/Navigation.Component';
+
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+
+const client = new ApolloClient({
+	uri: 'http://localhost:4000/',
+	cache: new InMemoryCache(),
+});
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Router>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/product" element={<Product />} />
-        <Route path="/cart" element={<Cart />} />
-      </Routes>
-    </Router>
-  </React.StrictMode>,
-  document.getElementById('root')
+	<React.StrictMode>
+		<Router>
+			<ApolloProvider client={client}>
+				<Routes>
+					<Route path='/' element={<App client={client} />}>
+						<Route path='/:pdp' element={<Category client={client} />} />
+						<Route path='/plp/:id' element={<Product client={client} />} />
+						<Route path='/cart' element={<Cart client={client} />} />
+					</Route>
+				</Routes>
+			</ApolloProvider>
+		</Router>
+	</React.StrictMode>,
+	document.getElementById('root'),
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import './Category.styles.scss';
-import Navigation from '../../components/Navigation/Navigation.Component';
 import Directory from '../../components/Directory/Directory.Component';
+import { gql } from '@apollo/client';
+import { CategoryContext, CategoryProductsContext } from '../../contexts';
 
 class Category extends PureComponent {
 	constructor(props) {
@@ -11,8 +12,19 @@ class Category extends PureComponent {
 	render() {
 		return (
 			<div className='category-page'>
-				<Navigation />
-				<Directory />
+				<CategoryContext.Consumer>
+					{(category) => (
+						<CategoryProductsContext.Consumer>
+							{(products) => (
+								<Directory
+									products={products}
+									category={category}
+									client={this.props.client}
+								/>
+							)}
+						</CategoryProductsContext.Consumer>
+					)}
+				</CategoryContext.Consumer>
 			</div>
 		);
 	}
