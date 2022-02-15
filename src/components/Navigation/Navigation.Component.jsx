@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import './Navigation.styles.scss';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { withParams } from '../../withParams';
 
 class Navigation extends PureComponent {
@@ -8,10 +8,6 @@ class Navigation extends PureComponent {
 		super(props);
 	}
 
-	componentDidMount() {
-		let id = this.props.params.id;
-		// console.log(id);
-	}
 	render() {
 		// console.log(this.props);
 		return (

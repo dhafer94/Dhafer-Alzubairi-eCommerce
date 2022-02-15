@@ -18,6 +18,7 @@ class App extends PureComponent {
 	}
 	//one request to get all the needed data from the server
 	componentDidMount() {
+		const controller = new AbortController();
 		this.props.client
 			.query({
 				query: gql`
@@ -53,7 +54,7 @@ class App extends PureComponent {
 				this.setState({
 					allData: res.data.categories.map((item) => item),
 					categoriesNames: res.data.categories.map((item) => item.name),
-					products: res.data.categories[0].products.map((item) => item),
+					products: res.data.categories[0].products,
 				}),
 			);
 
@@ -61,21 +62,27 @@ class App extends PureComponent {
 		window.addEventListener('popstate', () => {
 			window.location.reload();
 		});
+
+		return () => {
+			controller.abort();
+		};
 	}
 
 	handleCategoryClick = (e) => {
+		const filteredCategory = this.state.allData.filter((category) => {
+			return category.name === e.target.innerText && category.products;
+		});
+
 		this.setState({
 			activeRoute: e.target.innerText,
-			products: this.state.allData.filter((product, i) => {
-				return product.name === e.target.innerText;
-			}),
+			products: filteredCategory[0].products,
 		});
 	};
 
 	render() {
-		const category = this.state.activeRoute;
+		const route = this.state.activeRoute;
 		const products = this.state.products;
-		// console.log(window.location.pathname);
+		// console.log(products);
 
 		return (
 			<div className='App'>
@@ -84,9 +91,9 @@ class App extends PureComponent {
 					categoriesNames={this.state.categoriesNames}
 				/>
 				{window.location.pathname === '/' ? (
-					<Category />
+					<Category products={products} />
 				) : (
-					<CategoryContext.Provider value={category}>
+					<CategoryContext.Provider value={route}>
 						<CategoryProductsContext.Provider value={products}>
 							<Outlet />
 						</CategoryProductsContext.Provider>

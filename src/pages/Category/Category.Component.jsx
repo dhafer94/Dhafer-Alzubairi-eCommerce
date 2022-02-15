@@ -13,12 +13,12 @@ class Category extends PureComponent {
 		return (
 			<div className='category-page'>
 				<CategoryContext.Consumer>
-					{(category) => (
+					{(route) => (
 						<CategoryProductsContext.Consumer>
 							{(products) => (
 								<Directory
 									products={products}
-									category={category}
+									category={route}
 									client={this.props.client}
 								/>
 							)}

@@ -6,22 +6,25 @@ import { useNavigate } from 'react-router';
 class Directory extends PureComponent {
 	constructor(props) {
 		super(props);
-		// this.state = {
-		// 	products: [],
-		// };
+		this.state = {
+			products: [],
+		};
+	}
+	componentDidMount() {
+		this.setState({
+			products: this.props.products,
+		});
 	}
 
 	render() {
+		// console.log(this.props.products[0]);
 		return (
 			<>
 				<h2 className='category-name'>Category Name</h2>
 				<div className='directory-container'>
-					<ProductCard />
-					<ProductCard />
-					<ProductCard />
-					<ProductCard />
-					<ProductCard />
-					<ProductCard />
+					{this.props.products.map((product, i) => {
+						return <ProductCard key={i} product={product} />;
+					})}
 				</div>
 			</>
 		);
