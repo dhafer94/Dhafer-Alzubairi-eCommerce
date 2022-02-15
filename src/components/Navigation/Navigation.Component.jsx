@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import './Navigation.styles.scss';
+import Currency from '../Currency/Currency.Component';
 import { Link } from 'react-router-dom';
 import { withParams } from '../../withParams';
 
@@ -7,9 +8,12 @@ class Navigation extends PureComponent {
 	constructor(props) {
 		super(props);
 	}
-
+	onSelectHandler = (e) => {
+		console.log(e);
+	};
 	render() {
-		// console.log(this.props);
+		const currency = this.props.currency;
+
 		return (
 			<nav className='navbar'>
 				<ul className='navbar-categories-links'>
@@ -26,7 +30,7 @@ class Navigation extends PureComponent {
 				</ul>
 				<div className='navbar-logo'>LOGO</div>
 				<div className='navbar-actions'>
-					<div className='navbar-currency'>currency</div>
+					<Currency currency={currency} />
 					<Link
 						onClick={this.props.handleCategoryClick}
 						to='/cart'

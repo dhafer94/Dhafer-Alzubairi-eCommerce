@@ -5,6 +5,7 @@ import Category from './pages/Category/Category.Component';
 import { Link, Outlet } from 'react-router-dom';
 import { gql } from '@apollo/client';
 import { CategoryContext, CategoryProductsContext } from './contexts';
+import { valueToObjectRepresentation } from '@apollo/client/utilities';
 
 class App extends PureComponent {
 	constructor(props) {
@@ -14,6 +15,7 @@ class App extends PureComponent {
 			categoriesNames: [],
 			activeRoute: 'all',
 			products: [],
+			currency: [{ label: 'USD', symbol: '$' }],
 		};
 	}
 	//one request to get all the needed data from the server
@@ -55,6 +57,9 @@ class App extends PureComponent {
 					allData: res.data.categories.map((item) => item),
 					categoriesNames: res.data.categories.map((item) => item.name),
 					products: res.data.categories[0].products,
+					currency: res.data.categories[0].products[0].prices.map((item) => {
+						return { label: item.currency.label, symbol: item.currency.symbol };
+					}),
 				}),
 			);
 
@@ -82,13 +87,15 @@ class App extends PureComponent {
 	render() {
 		const route = this.state.activeRoute;
 		const products = this.state.products;
-		// console.log(products);
+		const currency = this.state.currency;
+		// console.log(this.state.currency);
 
 		return (
 			<div className='App'>
 				<Navigation
 					handleCategoryClick={this.handleCategoryClick}
 					categoriesNames={this.state.categoriesNames}
+					currency={currency}
 				/>
 				{window.location.pathname === '/' ? (
 					<Category products={products} />
