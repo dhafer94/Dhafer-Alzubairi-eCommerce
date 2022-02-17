@@ -6,28 +6,25 @@ class Currency extends PureComponent {
 	}
 
 	render() {
-		const currency = this.props.currency;
+		const handleChange = this.props.handleChange;
 		return (
 			<select
+				onInput={(e) => handleChange(e.target.value)}
 				className='navbar-currency'
-				onChange={this.onSelectHandler}
-				name='currency'
-				id=''>
-				{' '}
-				{currency.map((item, i) => {
-					if (i === 0) {
+				name='currency'>
+				{this.props.currency.map((item, i) => {
+					if (item.selected) {
 						return (
-							<option key={i} value={`${item.label}`}>
-								{item.symbol}
-							</option>
-						);
-					} else {
-						return (
-							<option key={i} value={`${item.label}`}>
-								{item.symbol} {item.label}
+							<option {...item.selected} key={i} value={item.label}>
+								{`${item.symbol}`}
 							</option>
 						);
 					}
+					return (
+						<option {...item.selected} key={i} value={item.label}>
+							{`${item.symbol} | ${item.label}`}
+						</option>
+					);
 				})}
 			</select>
 		);

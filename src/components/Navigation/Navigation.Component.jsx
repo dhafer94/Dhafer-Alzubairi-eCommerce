@@ -8,12 +8,9 @@ class Navigation extends PureComponent {
 	constructor(props) {
 		super(props);
 	}
-	onSelectHandler = (e) => {
-		console.log(e);
-	};
+
 	render() {
 		const currency = this.props.currency;
-
 		return (
 			<nav className='navbar'>
 				<ul className='navbar-categories-links'>
@@ -30,7 +27,11 @@ class Navigation extends PureComponent {
 				</ul>
 				<div className='navbar-logo'>LOGO</div>
 				<div className='navbar-actions'>
-					<Currency currency={currency} />
+					<Currency
+						dataFetched={this.props.dataFetched}
+						currency={currency}
+						handleChange={this.props.handleChange}
+					/>
 					<Link
 						onClick={this.props.handleCategoryClick}
 						to='/cart'

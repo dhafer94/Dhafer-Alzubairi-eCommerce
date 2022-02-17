@@ -1,11 +1,14 @@
-import React, { PureComponent, createContext } from 'react';
+import React, { PureComponent } from 'react';
 import './App.css';
 import Navigation from './components/Navigation/Navigation.Component';
 import Category from './pages/Category/Category.Component';
-import { Link, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { gql } from '@apollo/client';
-import { CategoryContext, CategoryProductsContext } from './contexts';
-import { valueToObjectRepresentation } from '@apollo/client/utilities';
+import {
+	CategoryContext,
+	CategoryProductsContext,
+	CurrencyContext,
+} from './contexts';
 
 class App extends PureComponent {
 	constructor(props) {
@@ -15,9 +18,11 @@ class App extends PureComponent {
 			categoriesNames: [],
 			activeRoute: 'all',
 			products: [],
-			currency: [{ label: 'USD', symbol: '$' }],
+			currency: [],
+			dataFetched: false,
 		};
 	}
+
 	//one request to get all the needed data from the server
 	componentDidMount() {
 		const controller = new AbortController();
@@ -52,16 +57,25 @@ class App extends PureComponent {
 					}
 				`,
 			})
-			.then((res) =>
-				this.setState({
-					allData: res.data.categories.map((item) => item),
-					categoriesNames: res.data.categories.map((item) => item.name),
-					products: res.data.categories[0].products,
-					currency: res.data.categories[0].products[0].prices.map((item) => {
-						return { label: item.currency.label, symbol: item.currency.symbol };
-					}),
-				}),
-			);
+			.then((res) => {
+				if (!this.state.dataFetched) {
+					this.setState({
+						allData: res.data.categories.map((item) => item),
+						categoriesNames: res.data.categories.map((item) => item.name),
+						products: res.data.categories[0].products,
+						currency: res.data.categories[0].products[0].prices.map(
+							(item, i) => {
+								return {
+									label: item.currency.label,
+									symbol: item.currency.symbol,
+									selected: i === 0 ? true : false,
+								};
+							},
+						),
+						dataFetched: true,
+					});
+				}
+			});
 
 		// to fully render the content when going back to root route
 		window.addEventListener('popstate', () => {
@@ -84,11 +98,26 @@ class App extends PureComponent {
 		});
 	};
 
+	handleChange = (value) => {
+		this.setState((state) => ({
+			currency: state.currency.map((c) => {
+				return {
+					...c,
+					selected: c.label === value,
+				};
+			}),
+		}));
+	};
+
 	render() {
 		const route = this.state.activeRoute;
 		const products = this.state.products;
 		const currency = this.state.currency;
-		// console.log(this.state.currency);
+		const dataFetched = this.state.dataFetched;
+		const selectedCurrency = this.state.currency.find(
+			(item) => item.selected === true,
+		);
+		// console.log(selectedCurrency);
 
 		return (
 			<div className='App'>
@@ -96,14 +125,22 @@ class App extends PureComponent {
 					handleCategoryClick={this.handleCategoryClick}
 					categoriesNames={this.state.categoriesNames}
 					currency={currency}
+					handleChange={this.handleChange}
+					dataFetched={dataFetched}
 				/>
 				{window.location.pathname === '/' ? (
-					<Category products={products} />
+					<CurrencyContext.Provider value={selectedCurrency}>
+						<CategoryProductsContext.Provider value={products}>
+							<Category />
+						</CategoryProductsContext.Provider>
+					</CurrencyContext.Provider>
 				) : (
 					<CategoryContext.Provider value={route}>
-						<CategoryProductsContext.Provider value={products}>
-							<Outlet />
-						</CategoryProductsContext.Provider>
+						<CurrencyContext.Provider value={selectedCurrency}>
+							<CategoryProductsContext.Provider value={products}>
+								<Outlet />
+							</CategoryProductsContext.Provider>
+						</CurrencyContext.Provider>
 					</CategoryContext.Provider>
 				)}
 			</div>

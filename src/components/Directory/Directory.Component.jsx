@@ -1,29 +1,24 @@
 import React, { PureComponent } from 'react';
 import './Directory.styles.scss';
 import ProductCard from '../ProductCard/ProductCard.Component';
-import { useNavigate } from 'react-router';
 
 class Directory extends PureComponent {
 	constructor(props) {
 		super(props);
-		this.state = {
-			products: [],
-		};
-	}
-	componentDidMount() {
-		this.setState({
-			products: this.props.products,
-		});
 	}
 
 	render() {
-		// console.log(this.props.products[0]);
+		const currency = this.props.currency;
+		const category = this.props.category;
+
 		return (
 			<>
-				<h2 className='category-name'>Category Name</h2>
+				<h2 className='category-name'>{category}</h2>
 				<div className='directory-container'>
 					{this.props.products.map((product, i) => {
-						return <ProductCard key={i} product={product} />;
+						return (
+							<ProductCard currency={currency} key={i} product={product} />
+						);
 					})}
 				</div>
 			</>

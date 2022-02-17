@@ -7,7 +7,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Product from './pages/Product/Product.Component';
 import Cart from './pages/Cart/Cart.Component';
 import Category from './pages/Category/Category.Component';
-import Navigation from './components/Navigation/Navigation.Component';
 
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
