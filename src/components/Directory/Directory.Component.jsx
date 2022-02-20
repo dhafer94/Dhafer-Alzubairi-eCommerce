@@ -1,23 +1,27 @@
 import React, { PureComponent } from 'react';
 import './Directory.styles.scss';
 import ProductCard from '../ProductCard/ProductCard.Component';
-
+import { withRouter } from '../../withRouter';
 class Directory extends PureComponent {
 	constructor(props) {
 		super(props);
 	}
 
 	render() {
-		const currency = this.props.currency;
-		const category = this.props.category;
-
+		const { currency, category, handleProductChoice, products } = this.props;
+		// console.log(this.props.router);
 		return (
 			<>
 				<h2 className='category-name'>{category}</h2>
 				<div className='directory-container'>
-					{this.props.products.map((product, i) => {
+					{products.map((product, i) => {
 						return (
-							<ProductCard currency={currency} key={i} product={product} />
+							<ProductCard
+								handleProductChoice={handleProductChoice}
+								currency={currency}
+								key={i}
+								product={product}
+							/>
 						);
 					})}
 				</div>
@@ -26,4 +30,4 @@ class Directory extends PureComponent {
 	}
 }
 
-export default Directory;
+export default withRouter(Directory);

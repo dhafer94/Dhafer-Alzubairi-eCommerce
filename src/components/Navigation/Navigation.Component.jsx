@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import './Navigation.styles.scss';
 import Currency from '../Currency/Currency.Component';
-import { Link } from 'react-router-dom';
-import { withParams } from '../../withParams';
+import { NavLink } from 'react-router-dom';
+import { withRouter } from '../../withRouter';
 
 class Navigation extends PureComponent {
 	constructor(props) {
@@ -10,38 +10,34 @@ class Navigation extends PureComponent {
 	}
 
 	render() {
-		const currency = this.props.currency;
+		const { currency, categoriesNames, dataFetched, handleChange } = this.props;
+		// console.log(this.props.router.params);
+
 		return (
 			<nav className='navbar'>
 				<ul className='navbar-categories-links'>
-					{this.props.categoriesNames.map((element, i) => {
+					{categoriesNames.map((element, i) => {
 						return (
-							<Link
-								onClick={this.props.handleCategoryClick}
-								key={i}
-								to={`/${element}`}>
+							<NavLink key={i} to={`/plp/${element}`}>
 								{element}
-							</Link>
+							</NavLink>
 						);
 					})}
 				</ul>
 				<div className='navbar-logo'>LOGO</div>
 				<div className='navbar-actions'>
 					<Currency
-						dataFetched={this.props.dataFetched}
+						dataFetched={dataFetched}
 						currency={currency}
-						handleChange={this.props.handleChange}
+						handleChange={handleChange}
 					/>
-					<Link
-						onClick={this.props.handleCategoryClick}
-						to='/cart'
-						className='navbar-cart'>
+					<NavLink to='/cart' className='navbar-cart'>
 						cart
-					</Link>
+					</NavLink>
 				</div>
 			</nav>
 		);
 	}
 }
 
-export default withParams(Navigation);
+export default withRouter(Navigation);

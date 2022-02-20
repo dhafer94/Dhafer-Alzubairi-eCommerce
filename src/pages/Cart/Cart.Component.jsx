@@ -1,13 +1,13 @@
 import React, { PureComponent } from 'react';
 import './Cart.styles.scss';
-import { gql } from '@apollo/client';
+import { withRouter } from '../../withRouter';
 
 class Cart extends PureComponent {
 	constructor(props) {
 		super(props);
 	}
-
 	render() {
+		// console.log(this.props);
 		return (
 			<div>
 				<h1>Cart</h1>
@@ -16,4 +16,4 @@ class Cart extends PureComponent {
 	}
 }
 
-export default Cart;
+export default withRouter(Cart);

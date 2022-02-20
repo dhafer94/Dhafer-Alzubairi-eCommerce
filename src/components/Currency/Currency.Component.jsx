@@ -6,6 +6,7 @@ class Currency extends PureComponent {
 	}
 
 	render() {
+		// console.log(this);
 		const handleChange = this.props.handleChange;
 		return (
 			<select

@@ -5,7 +5,9 @@ import {
 	CategoryContext,
 	CategoryProductsContext,
 	CurrencyContext,
+	HandleProductChoiceContext,
 } from '../../contexts';
+import { withRouter } from '../../withRouter';
 
 class Category extends PureComponent {
 	constructor(props) {
@@ -13,29 +15,35 @@ class Category extends PureComponent {
 	}
 
 	render() {
+		// console.log(this.props);
 		return (
 			<div className='category-page'>
-				<CategoryContext.Consumer>
-					{(route) => (
-						<CurrencyContext.Consumer>
-							{(currency) => (
-								<CategoryProductsContext.Consumer>
-									{(products) => (
-										<Directory
-											currency={currency}
-											products={products}
-											category={route}
-											client={this.props.client}
-										/>
+				<HandleProductChoiceContext.Consumer>
+					{(handleProductChoice) => (
+						<CategoryContext.Consumer>
+							{(route) => (
+								<CurrencyContext.Consumer>
+									{(currency) => (
+										<CategoryProductsContext.Consumer>
+											{(products) => (
+												<Directory
+													currency={currency}
+													products={products}
+													category={route}
+													client={this.props.client}
+													handleProductchoice={handleProductChoice}
+												/>
+											)}
+										</CategoryProductsContext.Consumer>
 									)}
-								</CategoryProductsContext.Consumer>
+								</CurrencyContext.Consumer>
 							)}
-						</CurrencyContext.Consumer>
+						</CategoryContext.Consumer>
 					)}
-				</CategoryContext.Consumer>
+				</HandleProductChoiceContext.Consumer>
 			</div>
 		);
 	}
 }
 
-export default Category;
+export default withRouter(Category);

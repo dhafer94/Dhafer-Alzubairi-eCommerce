@@ -21,8 +21,8 @@ ReactDOM.render(
 			<ApolloProvider client={client}>
 				<Routes>
 					<Route path='/' element={<App client={client} />}>
-						<Route path='/:pdp' element={<Category client={client} />} />
-						<Route path='/plp/:id' element={<Product client={client} />} />
+						<Route path='/plp/:plp' element={<Category client={client} />} />
+						<Route path='/:plp/:pdp' element={<Product client={client} />} />
 						<Route path='/cart' element={<Cart client={client} />} />
 					</Route>
 				</Routes>

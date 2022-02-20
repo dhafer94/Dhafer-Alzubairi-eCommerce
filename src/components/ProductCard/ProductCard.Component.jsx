@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import './ProductCard.styles.scss';
+import { NavLink } from 'react-router-dom';
 
 class ProductCard extends PureComponent {
 	constructor(props) {
@@ -7,20 +8,24 @@ class ProductCard extends PureComponent {
 	}
 
 	render() {
-		const name = this.props.product.name;
-		const img = this.props.product.gallery[0];
-		const currency = this.props.currency;
-		const price = this.props.product.prices.find(
-			(i) => currency.label === i.currency.label,
-		);
+		const { currency, handleProductChoice } = this.props;
+		const { id, name, gallery, prices, category } = this.props.product;
+		const img = gallery[0];
+		const price = prices.find((i) => currency.label === i.currency.label);
+		// console.log(category);
 		return (
 			<div className='product'>
-				<img src={img} alt={name} width='350px' height='330px' />
-				<p>{name}</p>
-				<p>
-					{price.currency.symbol}
-					{price.amount}
-				</p>
+				<NavLink
+					id={id}
+					onClick={handleProductChoice}
+					to={`/${category}/${id}`}>
+					<img id={id} src={img} alt={name} width='350px' height='330px' />
+					<p id={id}>{name}</p>
+					<p id={id}>
+						{price.currency.symbol}
+						{price.amount}
+					</p>
+				</NavLink>
 			</div>
 		);
 	}

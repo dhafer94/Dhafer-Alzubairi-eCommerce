@@ -8,7 +8,12 @@ import {
 	CategoryContext,
 	CategoryProductsContext,
 	CurrencyContext,
+	HandleProductChoiceContext,
+	ChosenProductIdContext,
+	AllDataContext
 } from './contexts';
+import { withRouter } from './withRouter';
+// import { currencySort } from './components/Currency/Currency.Component';
 
 class App extends PureComponent {
 	constructor(props) {
@@ -20,6 +25,7 @@ class App extends PureComponent {
 			products: [],
 			currency: [],
 			dataFetched: false,
+			chosenProductId: ''
 		};
 	}
 
@@ -77,75 +83,80 @@ class App extends PureComponent {
 				}
 			});
 
-		// to fully render the content when going back to root route
-		window.addEventListener('popstate', () => {
-			window.location.reload();
-		});
-
+		// console.log(this.state.dataFetched);
 		return () => {
 			controller.abort();
 		};
 	}
+	componentDidUpdate() {
+		if (this.state.dataFetched && this.props.router.location.pathname === `/plp/${this.props.router.params.plp}`) {
+			// console.log(this.props.router.params);
+			const products = this.state.allData.filter((category) => {
+				return category.name === this.props.router.params.plp && category.products;
+			})[0].products;
 
-	handleCategoryClick = (e) => {
-		const filteredCategory = this.state.allData.filter((category) => {
-			return category.name === e.target.innerText && category.products;
-		});
-
-		this.setState({
-			activeRoute: e.target.innerText,
-			products: filteredCategory[0].products,
-		});
-	};
+			return this.setState({
+				activeRoute: this.props.router.params.plp,
+				products: products,
+			});
+		}
+		if (this.props.router.location.pathname === '/') {
+			this.props.router.navigate('/plp/all');
+		}
+	}
 
 	handleChange = (value) => {
-		this.setState((state) => ({
-			currency: state.currency.map((c) => {
-				return {
-					...c,
-					selected: c.label === value,
-				};
-			}),
-		}));
+		if (this.state.dataFetched) {
+			this.setState((state) => ({
+				currency: state.currency.map((c) => {
+					return {
+						...c,
+						selected: c.label === value,
+					};
+				}),
+			}));
+		}
 	};
 
+	handleProductChoice = (e) => {
+		if (this.state.dataFetched) {
+			this.setState({
+				chosenProductId: e.target.id
+			});
+		}
+	};
+
+
 	render() {
-		const route = this.state.activeRoute;
-		const products = this.state.products;
-		const currency = this.state.currency;
-		const dataFetched = this.state.dataFetched;
+		const { activeRoute, products, currency, dataFetched, chosenProductId, allData } = this.state;
 		const selectedCurrency = this.state.currency.find(
 			(item) => item.selected === true,
 		);
-		// console.log(selectedCurrency);
 
 		return (
 			<div className='App'>
 				<Navigation
-					handleCategoryClick={this.handleCategoryClick}
 					categoriesNames={this.state.categoriesNames}
 					currency={currency}
 					handleChange={this.handleChange}
 					dataFetched={dataFetched}
 				/>
-				{window.location.pathname === '/' ? (
-					<CurrencyContext.Provider value={selectedCurrency}>
-						<CategoryProductsContext.Provider value={products}>
-							<Category />
-						</CategoryProductsContext.Provider>
-					</CurrencyContext.Provider>
-				) : (
-					<CategoryContext.Provider value={route}>
-						<CurrencyContext.Provider value={selectedCurrency}>
-							<CategoryProductsContext.Provider value={products}>
-								<Outlet />
-							</CategoryProductsContext.Provider>
-						</CurrencyContext.Provider>
-					</CategoryContext.Provider>
-				)}
+				<AllDataContext.Provider value={allData}>
+					<ChosenProductIdContext.Provider value={chosenProductId}>
+						<HandleProductChoiceContext.Provider value={this.handleProductChoice}>
+							<CategoryContext.Provider value={activeRoute}>
+								<CurrencyContext.Provider value={selectedCurrency}>
+									<CategoryProductsContext.Provider value={products}>
+										<Outlet />
+									</CategoryProductsContext.Provider>
+								</CurrencyContext.Provider>
+							</CategoryContext.Provider>
+						</HandleProductChoiceContext.Provider>
+					</ChosenProductIdContext.Provider>
+				</AllDataContext.Provider>
 			</div>
 		);
 	}
 }
 
-export default App;
+export default withRouter(App);
