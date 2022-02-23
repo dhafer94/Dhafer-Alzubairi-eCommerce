@@ -4,44 +4,34 @@ import ProductProfile from '../../components/ProductProfile/ProductProfile.Compo
 import {
 	CategoryProductsContext,
 	CurrencyContext,
-	ChosenProductIdContext,
 	AllDataContext,
 } from '../../contexts';
 
 class Product extends PureComponent {
 	constructor(props) {
 		super(props);
-		this.state = {
-			categories: [],
-		};
 	}
 
 	render() {
 		return (
 			<div>
-				<ChosenProductIdContext.Consumer>
-					{(chosenProduct) => (
-						<AllDataContext.Consumer>
-							{(allData) => (
-								<CurrencyContext.Consumer>
-									{(currency) => (
-										<CategoryProductsContext.Consumer>
-											{(products) => (
-												<ProductProfile
-													currency={currency}
-													products={products}
-													client={this.props.client}
-													allData={allData}
-													chosenProduct={chosenProduct}
-												/>
-											)}
-										</CategoryProductsContext.Consumer>
+				<AllDataContext.Consumer>
+					{(allData) => (
+						<CurrencyContext.Consumer>
+							{(currency) => (
+								<CategoryProductsContext.Consumer>
+									{(products) => (
+										<ProductProfile
+											currency={currency}
+											products={products}
+											allData={allData}
+										/>
 									)}
-								</CurrencyContext.Consumer>
+								</CategoryProductsContext.Consumer>
 							)}
-						</AllDataContext.Consumer>
+						</CurrencyContext.Consumer>
 					)}
-				</ChosenProductIdContext.Consumer>
+				</AllDataContext.Consumer>
 			</div>
 		);
 	}

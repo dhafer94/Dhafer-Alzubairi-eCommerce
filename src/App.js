@@ -1,15 +1,12 @@
 import React, { PureComponent } from 'react';
 import './App.css';
 import Navigation from './components/Navigation/Navigation.Component';
-import Category from './pages/Category/Category.Component';
 import { Outlet } from 'react-router-dom';
 import { gql } from '@apollo/client';
 import {
 	CategoryContext,
 	CategoryProductsContext,
 	CurrencyContext,
-	HandleProductChoiceContext,
-	ChosenProductIdContext,
 	AllDataContext
 } from './contexts';
 import { withRouter } from './withRouter';
@@ -21,11 +18,9 @@ class App extends PureComponent {
 		this.state = {
 			allData: [],
 			categoriesNames: [],
-			activeRoute: 'all',
 			products: [],
 			currency: [],
 			dataFetched: false,
-			chosenProductId: ''
 		};
 	}
 
@@ -88,6 +83,7 @@ class App extends PureComponent {
 			controller.abort();
 		};
 	}
+
 	componentDidUpdate() {
 		if (this.state.dataFetched && this.props.router.location.pathname === `/plp/${this.props.router.params.plp}`) {
 			// console.log(this.props.router.params);
@@ -96,7 +92,6 @@ class App extends PureComponent {
 			})[0].products;
 
 			return this.setState({
-				activeRoute: this.props.router.params.plp,
 				products: products,
 			});
 		}
@@ -118,17 +113,9 @@ class App extends PureComponent {
 		}
 	};
 
-	handleProductChoice = (e) => {
-		if (this.state.dataFetched) {
-			this.setState({
-				chosenProductId: e.target.id
-			});
-		}
-	};
-
 
 	render() {
-		const { activeRoute, products, currency, dataFetched, chosenProductId, allData } = this.state;
+		const { products, currency, dataFetched, allData } = this.state;
 		const selectedCurrency = this.state.currency.find(
 			(item) => item.selected === true,
 		);
@@ -142,17 +129,11 @@ class App extends PureComponent {
 					dataFetched={dataFetched}
 				/>
 				<AllDataContext.Provider value={allData}>
-					<ChosenProductIdContext.Provider value={chosenProductId}>
-						<HandleProductChoiceContext.Provider value={this.handleProductChoice}>
-							<CategoryContext.Provider value={activeRoute}>
-								<CurrencyContext.Provider value={selectedCurrency}>
-									<CategoryProductsContext.Provider value={products}>
-										<Outlet />
-									</CategoryProductsContext.Provider>
-								</CurrencyContext.Provider>
-							</CategoryContext.Provider>
-						</HandleProductChoiceContext.Provider>
-					</ChosenProductIdContext.Provider>
+					<CurrencyContext.Provider value={selectedCurrency}>
+						<CategoryProductsContext.Provider value={products}>
+							<Outlet />
+						</CategoryProductsContext.Provider>
+					</CurrencyContext.Provider>
 				</AllDataContext.Provider>
 			</div>
 		);
