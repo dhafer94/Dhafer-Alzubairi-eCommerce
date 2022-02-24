@@ -5,6 +5,7 @@ import {
 	CategoryProductsContext,
 	CurrencyContext,
 	AllDataContext,
+	DataFetchedContext,
 } from '../../contexts';
 
 class Product extends PureComponent {
@@ -14,24 +15,33 @@ class Product extends PureComponent {
 
 	render() {
 		return (
-			<div>
-				<AllDataContext.Consumer>
-					{(allData) => (
-						<CurrencyContext.Consumer>
-							{(currency) => (
-								<CategoryProductsContext.Consumer>
-									{(products) => (
-										<ProductProfile
-											currency={currency}
-											products={products}
-											allData={allData}
-										/>
+			<div className='product-profile'>
+				<CurrencyContext.Consumer>
+					{(currency) => (
+						<DataFetchedContext.Consumer>
+							{(dataFetched) => (
+								<AllDataContext.Consumer>
+									{(allData) => (
+										<CurrencyContext.Consumer>
+											{(currency) => (
+												<CategoryProductsContext.Consumer>
+													{(products) => (
+														<ProductProfile
+															currency={currency}
+															products={products}
+															allData={allData}
+															dataFetched={dataFetched}
+														/>
+													)}
+												</CategoryProductsContext.Consumer>
+											)}
+										</CurrencyContext.Consumer>
 									)}
-								</CategoryProductsContext.Consumer>
+								</AllDataContext.Consumer>
 							)}
-						</CurrencyContext.Consumer>
+						</DataFetchedContext.Consumer>
 					)}
-				</AllDataContext.Consumer>
+				</CurrencyContext.Consumer>
 			</div>
 		);
 	}

@@ -22,7 +22,7 @@ ReactDOM.render(
 				<Routes>
 					<Route path='/' element={<App client={client} />}>
 						<Route path='/plp/:plp' element={<Category client={client} />} />
-						<Route path='/:plp/:pdp' element={<Product client={client} />} />
+						<Route path='/plp/:plp/:pdp' element={<Product client={client} />} />
 						<Route path='/cart' element={<Cart client={client} />} />
 					</Route>
 				</Routes>

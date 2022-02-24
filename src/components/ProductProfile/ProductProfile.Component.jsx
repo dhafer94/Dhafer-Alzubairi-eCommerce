@@ -20,7 +20,9 @@ class ProductProfile extends PureComponent {
 			const product = this.state.allData
 				.filter((category) => category.name === this.state.category)[0]
 				.products.find((i) => i.id === this.state.productId);
-			this.setState({ product: product });
+			this.setState({
+				product: product,
+			});
 		}
 	}
 	componentDidUpdate() {
@@ -31,45 +33,73 @@ class ProductProfile extends PureComponent {
 			const product = this.state.allData
 				.filter((category) => category.name === this.state.category)[0]
 				.products.find((i) => i.id === this.state.productId);
-			this.setState({ product: product });
+			this.setState({
+				product: product,
+			});
 		}
 	}
 
 	render() {
-		const { category, name, brand, attributes, gallery } = this.state.product;
-		// console.log(gallery);
+		const { prices, name, brand, attributes, gallery, description } =
+			this.state.product;
+		const createMarkup = () => {
+			return { __html: description };
+		};
+		console.log(this.props);
+
 		return (
 			<>
-				<div className='product-profile'>
-					<div className='product-images'>
-						{gallery
-							? gallery.map((img, i) => {
-									return i === 0 ? (
-										<img
-											className='product-primary-image'
-											width='200'
-											key={i}
-											src={img}
-											alt='product'
-										/>
-									) : (
-										<aside key={i}>
-											<img
-												className='product-secondary-image'
-												width='50'
-												key={i}
-												src={img}
-												alt='product'
-											/>{' '}
-										</aside>
-									);
-							  })
-							: 'Loading'}
-					</div>
-					<div className='product-box'>
-						<h2 className='product-name'>{name}</h2>
-					</div>
-				</div>
+				{gallery ? (
+					<>
+						<aside className='secondary-images'>
+							{gallery.map((img, i) => (
+								<img
+									className='product-secondary-image'
+									width='50'
+									key={i}
+									src={img}
+									alt='product'
+								/>
+							))}
+						</aside>
+
+						<div className='product-image-description'>
+							<img
+								className='product-primary-image'
+								src={gallery[0]}
+								alt='product'
+							/>
+							<div className='product-box'>
+								<h2 className='product-name'>{brand}</h2>
+								<p>{name}</p>
+								{attributes[0] ? (
+									<>
+										<p>{attributes[0].name}</p>
+										{attributes[0].items.map((attribute, i) => (
+											<div key={i}>{attribute.value}</div>
+										))}
+									</>
+								) : null}
+
+								{attributes[1] ? (
+									<>
+										<p>{attributes[1].name}</p>
+										{attributes[1].items.map((attribute, i) => (
+											<div key={i}>{attribute.value}</div>
+										))}
+									</>
+								) : null}
+								<div
+									className='product-description-box'
+									dangerouslySetInnerHTML={createMarkup()}
+								/>
+								{/* {description} */}
+							</div>
+						</div>
+					</>
+				) : (
+					'Loading'
+				)}
 			</>
 		);
 	}

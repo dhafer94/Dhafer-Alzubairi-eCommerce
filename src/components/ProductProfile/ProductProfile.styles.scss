@@ -1,53 +1,60 @@
-.product-profile {
-	margin: 7vh 14vw 0 6.5vw;
-	// margin-top: 11vh;
-	border: 1px solid black;
-	/* Group 625 */
-	position: absolute;
-	width: 1002px;
-	height: 513px;
-	left: 219px;
-	top: 160px;
+// .product-profile {
+// 	/* PDP */
 
-	& .product-images {
-		border: 1px solid black;
-		width: 600px;
-		// /* Image */
+// 	position: relative;
+// 	width: 1440px;
+// 	height: 650px;
+// 	margin: 7vh 14vw 0 6.5vw;
+// 	// margin-top: 11vh;
+// 	border: 1px solid black;
 
-		// position: absolute;
-		// width: 610px;
-		// height: 511px;
-		// left: 219px;
-		// top: 162px;
-	}
-	& .product-box {
-		/* Group 624 */
-		border: 1px solid black;
+// 	& .product-image-description {
+// 		border: 1px solid black;
+// 		// /* Group 625 */
+// 		position: absolute;
+// 		width: 1002px;
+// 		height: 513px;
+// 		left: 219px;
+// 		top: 160px;
 
-		position: absolute;
-		width: 292px;
-		height: 513px;
-		left: 929px;
-		top: 160px;
+// 		& .product-primary-image {
+// 			/* Image */
+// 			position: absolute;
+// 			width: 410px;
+// 			height: 311px;
+// 			left: 219px;
+// 			top: 162px;
+// 		}
+// 	}
 
-		// & .product-name {
-		// 	position: absolute;
-		// 	width: 292px;
-		// 	height: 27px;
-		// 	left: 929px;
-		// 	top: 160px;
+// 	& .product-box {
+// 		/* Group 624 */
+// 		border: 1px solid black;
 
-		// 	font-family: Raleway;
-		// 	font-style: normal;
-		// 	font-weight: 600;
-		// 	font-size: 30px;
-		// 	line-height: 27px;
-		// 	/* identical to box height, or 90% */
-		// 	margin: 300px;
-		// 	display: flex;
-		// 	align-items: center;
+// 		position: absolute;
+// 		width: 292px;
+// 		height: 513px;
+// 		left: 929px;
+// 		top: 160px;
 
-		// 	color: #1d1f22;
-		// }
-	}
-}
+// 		& .product-name {
+// 			position: absolute;
+// 			width: 292px;
+// 			height: 27px;
+// 			left: 929px;
+// 			top: 160px;
+
+// 			font-family: Raleway;
+// 			font-style: normal;
+// 			font-weight: 600;
+// 			font-size: 30px;
+// 			line-height: 27px;
+// 			/* identical to box height, or 90% */
+// 			margin: 300px;
+// 			display: flex;
+// 			align-items: center;
+
+// 			color: #1d1f22;
+// 		}
+// 	}
+// }

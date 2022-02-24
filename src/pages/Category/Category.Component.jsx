@@ -1,7 +1,11 @@
 import React, { PureComponent } from 'react';
 import './Category.styles.scss';
 import Directory from '../../components/Directory/Directory.Component';
-import { CategoryProductsContext, CurrencyContext } from '../../contexts';
+import {
+	CategoryProductsContext,
+	CurrencyContext,
+	DataFetchedContext,
+} from '../../contexts';
 import { withRouter } from '../../withRouter';
 
 class Category extends PureComponent {
@@ -13,15 +17,23 @@ class Category extends PureComponent {
 		// console.log(this.props);
 		return (
 			<div className='category-page'>
-				<CurrencyContext.Consumer>
-					{(currency) => (
-						<CategoryProductsContext.Consumer>
-							{(products) => (
-								<Directory currency={currency} products={products} />
+				<DataFetchedContext.Consumer>
+					{(dataFetched) => (
+						<CurrencyContext.Consumer>
+							{(currency) => (
+								<CategoryProductsContext.Consumer>
+									{(products) => (
+										<Directory
+											currency={currency}
+											products={products}
+											dataFetched={dataFetched}
+										/>
+									)}
+								</CategoryProductsContext.Consumer>
 							)}
-						</CategoryProductsContext.Consumer>
+						</CurrencyContext.Consumer>
 					)}
-				</CurrencyContext.Consumer>
+				</DataFetchedContext.Consumer>
 			</div>
 		);
 	}

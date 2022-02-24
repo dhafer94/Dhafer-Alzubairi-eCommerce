@@ -1,13 +1,12 @@
 import React, { PureComponent } from 'react';
-import './App.css';
+import './App.scss';
 import Navigation from './components/Navigation/Navigation.Component';
 import { Outlet } from 'react-router-dom';
 import { gql } from '@apollo/client';
 import {
-	CategoryContext,
 	CategoryProductsContext,
 	CurrencyContext,
-	AllDataContext
+	AllDataContext, DataFetchedContext
 } from './contexts';
 import { withRouter } from './withRouter';
 // import { currencySort } from './components/Currency/Currency.Component';
@@ -48,6 +47,8 @@ class App extends PureComponent {
 								brand
 								inStock
 								attributes {
+								name
+								type
 									items {
 										value
 									}
@@ -128,13 +129,15 @@ class App extends PureComponent {
 					handleChange={this.handleChange}
 					dataFetched={dataFetched}
 				/>
-				<AllDataContext.Provider value={allData}>
-					<CurrencyContext.Provider value={selectedCurrency}>
-						<CategoryProductsContext.Provider value={products}>
-							<Outlet />
-						</CategoryProductsContext.Provider>
-					</CurrencyContext.Provider>
-				</AllDataContext.Provider>
+				<DataFetchedContext.Provider value={dataFetched}>
+					<AllDataContext.Provider value={allData}>
+						<CurrencyContext.Provider value={selectedCurrency}>
+							<CategoryProductsContext.Provider value={products}>
+								<Outlet />
+							</CategoryProductsContext.Provider>
+						</CurrencyContext.Provider>
+					</AllDataContext.Provider>
+				</DataFetchedContext.Provider>
 			</div>
 		);
 	}

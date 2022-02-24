@@ -1,10 +1,11 @@
 .navbar {
-	height: 5rem;
+	height: 3.5rem;
 	display: flex;
 	flex-wrap: nowrap;
 	justify-content: space-between;
-	padding: 1.8vh 6.25vw 11vh;
+	padding: 1.8vh 8vw 11vh;
 	// border: 1px solid #000;
+	// flex-direction: row;
 
 	& .navbar-categories-links {
 		/* Navigation */
@@ -13,10 +14,8 @@
 		flex-direction: row;
 		align-items: flex-start;
 		justify-content: space-between;
-
 		width: 14.6rem;
 		height: 3.5rem;
-
 		list-style: none;
 		border-bottom: 1px solid #000;
 	}
@@ -24,8 +23,12 @@
 	& .navbar-logo {
 		/* a-logo */
 		width: 41px;
-		height: 41px;
-		align-self: center;
+		height: 3.5rem;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		border: 1px solid #000;
 	}
 
 	& .navbar-actions {
@@ -39,6 +42,6 @@
 		padding: 0px;
 
 		width: 204px;
-		height: 40px;
+		height: 3.5rem;
 	}
 }

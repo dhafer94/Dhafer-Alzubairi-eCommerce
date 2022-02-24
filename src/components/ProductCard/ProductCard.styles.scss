@@ -1,8 +1,37 @@
-.product {
+.product-card {
+	// text
+	font-family: Raleway;
+	font-style: normal;
+	font-size: 18px;
+	// line-height: 1vh;
+	text-decoration: none;
+	color: #1d1f22;
+
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	padding: 0px;
-	width: 24rem;
-	height: 27rem;
+	padding: 15px;
+	width: 26.8vw;
+	height: 60vh;
+	border: 1px solid #000;
+
+	& .product-img {
+		width: 24.5vw;
+		align-self: center;
+	}
+	& .product-info {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		// align-content: flex-start;
+		// text-align: left;
+		// border: 1px solid #000;
+
+		& .product-title {
+			font-weight: 300;
+		}
+		& .product-price {
+			font-weight: 500;
+		}
+	}
 }

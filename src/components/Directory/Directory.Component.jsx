@@ -8,18 +8,22 @@ class Directory extends PureComponent {
 	}
 
 	render() {
-		const { currency, products } = this.props;
+		const { currency, products, dataFetched } = this.props;
 		const category = this.props.router.params.plp;
-		// console.log(this.props.router.params.plp);
+		// console.log(this.props);
 		return (
 			<>
 				<h2 className='category-name'>{category}</h2>
 				<div className='directory-container'>
-					{products.map((product, i) => {
-						return (
-							<ProductCard currency={currency} key={i} product={product} />
-						);
-					})}
+					{dataFetched ? (
+						products.map((product, i) => {
+							return (
+								<ProductCard currency={currency} key={i} product={product} />
+							);
+						})
+					) : (
+						<h2>Loading ...</h2>
+					)}
 				</div>
 			</>
 		);
