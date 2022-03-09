@@ -45,7 +45,7 @@ class ProductProfile extends PureComponent {
 		const createMarkup = () => {
 			return { __html: description };
 		};
-		console.log(this.props);
+		// console.log(this.props);
 
 		return (
 			<>

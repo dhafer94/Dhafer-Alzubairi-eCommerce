@@ -4,13 +4,15 @@
 	height: 4.25rem;
 	// margin-left: ;
 	/* Heading / Desktop / H2 */
-	border: 1px solid #000;
+	// border: 1px solid #000;
 
 	// font-family: Raleway;
 	font-style: normal;
 	font-weight: 400;
 	font-size: 40px;
 	line-height: 160%;
+	text-transform: capitalize;
+
 	/* identical to box height, or 67px */
 
 	display: flex;
@@ -18,7 +20,8 @@
 
 	/* --c-text */
 	color: #1d1f22;
-	margin: 0 auto 8vh 6.6vw;
+	margin: 0 8vw 8vh;
+	// padding: 1.8vh 8vw 11vh;
 }
 .directory-container {
 	display: grid;
@@ -27,7 +30,10 @@
 	justify-content: center;
 	text-align: center;
 	gap: 40px;
-	padding: 0 4vw;
+	margin-left: 8vw;
+	margin-right: 8vw;
+
 	align-self: right;
 	// width: auto;
+	// border: 1px solid #000;
 }
