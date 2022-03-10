@@ -1,11 +1,14 @@
 .navbar {
+	position: static;
 	height: 3.5rem;
 	display: flex;
 	flex-wrap: nowrap;
 	justify-content: space-between;
 	padding: 1.8vh 8vw 11vh;
+	z-index: 9;
 	// border: 1px solid #000;
 	// flex-direction: row;
+	// overflow-y: visible;
 
 	& .navbar-categories-links {
 		/* Navigation */
@@ -15,7 +18,6 @@
 		align-items: flex-start;
 		justify-content: space-between;
 		width: 14.6rem;
-		height: 3.5rem;
 		list-style: none;
 		// border: 1px solid #000;
 		text-decoration: none;
@@ -50,6 +52,16 @@
 	& .navbar-actions {
 		/* Actions */
 		/* Auto layout */
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+		align-items: center;
+		padding: 0px;
+		width: 204px;
+		height: 3.5rem;
+		/* Actions */
+
+		/* Auto layout */
 
 		display: flex;
 		flex-direction: row;
@@ -57,7 +69,18 @@
 		align-items: center;
 		padding: 0px;
 
+		position: relative;
 		width: 204px;
-		height: 3.5rem;
+		height: 40px;
+		right: 101px;
+		top: 23px;
+
+		& .navbar-cart {
+			/* Inside auto layout */
+			flex: none;
+			order: 3;
+			flex-grow: 0;
+			margin: 0px 22px;
+		}
 	}
 }

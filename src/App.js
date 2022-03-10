@@ -20,6 +20,7 @@ class App extends PureComponent {
 			products: [],
 			currency: [],
 			dataFetched: false,
+			dropdown: 'inactive'
 		};
 	}
 
@@ -101,7 +102,9 @@ class App extends PureComponent {
 		}
 	}
 
-	handleChange = (value) => {
+	handleCurrencyClick = (e) => {
+		const value = e.target.value;
+		// e.target.parentNode.className = 'navbar-currency-select-menu-inactive';
 		if (this.state.dataFetched) {
 			this.setState((state) => ({
 				currency: state.currency.map((c) => {
@@ -110,24 +113,41 @@ class App extends PureComponent {
 						selected: c.label === value,
 					};
 				}),
+				dropdown: 'inactive'
 			}));
 		}
 	};
 
+	handleClicksForDropDown = (e) => {
+		const activeClass = 'currency-container active-bg';
+		const inactiveClass = 'currency-container inactive-bg';
+
+		if (e.target.className === inactiveClass || e.target.parentNode.className === inactiveClass) {
+			this.setState({ dropdown: 'active' });
+		} else if (e.target.className === activeClass || e.target.parentNode.className === activeClass) {
+			this.setState({ dropdown: 'inactive' });
+		} else {
+			this.setState({
+				dropdown: this.state.dropdown === 'inactive'
+			});
+		}
+	};
 
 	render() {
-		const { products, currency, dataFetched, allData } = this.state;
-		const selectedCurrency = this.state.currency.find(
+		const { products, currency, dataFetched, allData, dropdown } = this.state;
+		const selectedCurrency = this.state.currency.filter(
 			(item) => item.selected === true,
 		);
 
 		return (
-			<div className='App'>
+			<div onClick={(e) => this.handleClicksForDropDown(e)} className='App' >
 				<Navigation
 					categoriesNames={this.state.categoriesNames}
 					currency={currency}
-					handleChange={this.handleChange}
+					handleCurrencyClick={this.handleCurrencyClick}
 					dataFetched={dataFetched}
+					selectedCurrency={selectedCurrency}
+					dropdown={dropdown}
 				/>
 				<DataFetchedContext.Provider value={dataFetched}>
 					<AllDataContext.Provider value={allData}>

@@ -26,8 +26,8 @@ class ProductCard extends PureComponent {
 		const { currency, product } = this.props;
 		const { id, name, gallery, prices, category } = product;
 		const img = gallery[0];
-		const price = prices.find((i) => currency.label === i.currency.label);
-		// console.log(this.state.isHovering);
+		const price = prices.find((i) => currency[0].label === i.currency.label);
+		// console.log(currency[0]);
 		return (
 			<NavLink
 				className='product-card'

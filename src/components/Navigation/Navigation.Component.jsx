@@ -10,7 +10,15 @@ class Navigation extends PureComponent {
 	}
 
 	render() {
-		const { currency, categoriesNames, dataFetched, handleChange } = this.props;
+		const {
+			currency,
+			categoriesNames,
+			dataFetched,
+			handleCurrencyClick,
+			selectedCurrency,
+			dropdown,
+		} = this.props;
+		// console.log(this.props);
 
 		return (
 			<nav className='navbar'>
@@ -77,15 +85,18 @@ class Navigation extends PureComponent {
 				</div>
 				<div className='navbar-actions'>
 					<Currency
+						className='navbar-currency'
 						dataFetched={dataFetched}
 						currency={currency}
-						handleChange={handleChange}
+						handleCurrencyClick={handleCurrencyClick}
+						selectedCurrency={selectedCurrency}
+						dropdown={dropdown}
 					/>
 					<NavLink to='/cart' className='navbar-cart'>
 						<svg
 							xmlns='http://www.w3.org/2000/svg'
-							width='20'
-							height='20'
+							width='25'
+							height='25'
 							viewBox='0 0 20 20'
 							fill='none'>
 							<path
@@ -101,11 +112,8 @@ class Navigation extends PureComponent {
 								fill='#43464E'
 							/>
 						</svg>
-						{/* <img src='./empty-cart.svg' alt='' /> */}
-						{/* <object data='empty-cart.svg'></object> */}
 					</NavLink>
 				</div>
-				{/* <img src='./empty-cart.svg' alt='' /> */}
 			</nav>
 		);
 	}
