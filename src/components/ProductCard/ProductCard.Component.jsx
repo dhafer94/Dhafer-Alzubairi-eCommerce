@@ -11,7 +11,6 @@ class ProductCard extends PureComponent {
 	}
 
 	handleMouseEnter = (e) => {
-		// console.log(e.target);
 		this.setState(() => ({
 			isHovering: true,
 		}));

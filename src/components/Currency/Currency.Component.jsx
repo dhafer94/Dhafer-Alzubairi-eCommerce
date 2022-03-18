@@ -9,30 +9,6 @@ class Currency extends PureComponent {
 		};
 	}
 
-	// handleDropdown = (e) => {
-	// 	if (e.target.className === 'currency-container') {
-	// 		if (
-	// 			e.target.lastChild.className === 'navbar-currency-select-menu-inactive'
-	// 		) {
-	// 			e.target.lastChild.className = 'navbar-currency-select-menu-active';
-	// 		} else {
-	// 			e.target.lastChild.className = 'navbar-currency-select-menu-inactive';
-	// 		}
-	// 	}
-	// 	if (e.target.className === 'currency-placeholder') {
-	// 		if (
-	// 			e.target.parentNode.lastChild.className ===
-	// 			'navbar-currency-select-menu-inactive'
-	// 		) {
-	// 			e.target.parentNode.lastChild.className =
-	// 				'navbar-currency-select-menu-active';
-	// 		} else {
-	// 			e.target.parentNode.lastChild.className =
-	// 				'navbar-currency-select-menu-inactive';
-	// 		}
-	// 	}
-	// };
-
 	render() {
 		const { handleCurrencyClick, currency, dataFetched, dropdown } = this.props;
 		let selectedCurrency = currency.filter((item, i) => item.selected);
