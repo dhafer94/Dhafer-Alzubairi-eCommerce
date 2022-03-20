@@ -48,7 +48,6 @@ class ProductProfile extends PureComponent {
 	handleAttributeClick = (e) => {
 		const name = e.target.attributes.attribute.nodeValue;
 		const value = e.target.attributes.attributeval.nodeValue;
-		console.log(e);
 
 		//to reset the previous active attribute/s and visually set the active attribute visually
 		if (e.target.className === 'product-attribute') {
@@ -92,8 +91,7 @@ class ProductProfile extends PureComponent {
 		const createMarkup = () => {
 			return { __html: description };
 		};
-		console.log(chosenAttributes);
-		// chosenAttributes.
+		// console.log(description);
 		return (
 			<>
 				{gallery ? (
@@ -127,9 +125,8 @@ class ProductProfile extends PureComponent {
 								<p className='product-name'>{name}</p>
 								{typeof attributes !== 'undefined' &&
 									attributes.map((attribute, i) =>
-										// console.log(attribute.type),
 										attribute.type === 'swatch' ? (
-											<div key={i + 20}>
+											<>
 												<p
 													key={i + 10}
 													className='product-attribute-name'>{`${attributes[i].name}:`}</p>
@@ -149,7 +146,7 @@ class ProductProfile extends PureComponent {
 															key={index}></div>
 													))}
 												</div>
-											</div>
+											</>
 										) : (
 											<div key={i + 20}>
 												<p
@@ -185,7 +182,6 @@ class ProductProfile extends PureComponent {
 									className='product-description-box'
 									dangerouslySetInnerHTML={createMarkup()}
 								/>
-								{/* {description} */}
 							</div>
 						</div>
 					</>

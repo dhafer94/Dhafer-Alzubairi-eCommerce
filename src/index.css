@@ -1,7 +1,6 @@
 body {
 	margin: 0;
 	font-family: 'Raleway', sans-serif;
-	/* font-family: 'Roboto', sans-serif; */
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	background-color: #ffffff;
@@ -30,5 +29,5 @@ code {
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-	background: #555;
+	background: #1d1f22;
 }
