@@ -11,8 +11,8 @@ class Currency extends PureComponent {
 
 	render() {
 		const { handleCurrencyClick, currency, dataFetched, dropdown } = this.props;
-		let selectedCurrency = currency.filter((item, i) => item.selected);
-		// console.log(dropdown);
+		let selectedCurrency = currency.filter((item) => item.selected);
+
 		return (
 			<div
 				className={

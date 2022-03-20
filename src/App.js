@@ -9,7 +9,6 @@ import {
 	AllDataContext, DataFetchedContext
 } from './contexts';
 import { withRouter } from './withRouter';
-// import { currencySort } from './components/Currency/Currency.Component';
 
 class App extends PureComponent {
 	constructor(props) {
@@ -79,8 +78,6 @@ class App extends PureComponent {
 					});
 				}
 			});
-
-		// console.log(this.state.dataFetched);
 		return () => {
 			controller.abort();
 		};
@@ -88,7 +85,6 @@ class App extends PureComponent {
 
 	componentDidUpdate() {
 		if (this.state.dataFetched && this.props.router.location.pathname === `/plp/${this.props.router.params.plp}`) {
-			// console.log(this.props.router.params);
 			const products = this.state.allData.filter((category) => {
 				return category.name === this.props.router.params.plp && category.products;
 			})[0].products;
@@ -104,7 +100,6 @@ class App extends PureComponent {
 
 	handleCurrencyClick = (e) => {
 		const value = e.target.value;
-		// e.target.parentNode.className = 'navbar-currency-select-menu-inactive';
 		if (this.state.dataFetched) {
 			this.setState((state) => ({
 				currency: state.currency.map((c) => {
@@ -118,6 +113,7 @@ class App extends PureComponent {
 		}
 	};
 
+	//Listen to clicks anywhere on the page to control dropdown active, inactive state
 	handleClicksForDropDown = (e) => {
 		const activeClass = 'currency-container active-bg';
 		const inactiveClass = 'currency-container inactive-bg';

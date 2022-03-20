@@ -11,6 +11,7 @@ class ProductProfile extends PureComponent {
 			category: this.props.router.params.plp,
 			product: {},
 			primaryImg: '',
+			chosenAttributes: [],
 		};
 	}
 	componentDidMount() {
@@ -42,23 +43,57 @@ class ProductProfile extends PureComponent {
 		this.setState({
 			primaryImg: src,
 		});
-		// e.target.style.border = '1px solid #000';
-		// console.log(e.target.style);
-		// if (e.target.src === this.state.primaryImg) {
-		// 	console.log('j');
-		// 	e.target.className = 'product-secondary-image-active';
-		// }
+	};
+
+	handleAttributeClick = (e) => {
+		const name = e.target.attributes.attribute.nodeValue;
+		const value = e.target.attributes.attributeval.nodeValue;
+		console.log(e);
+
+		//to reset the previous active attribute/s and visually set the active attribute visually
+		if (e.target.className === 'product-attribute') {
+			e.target.parentNode.childNodes.forEach(
+				(child) => (child.className = 'product-attribute'),
+			);
+			e.target.className = 'product-attribute-active';
+		}
+		if (e.target.className === 'product-attribute-swatch') {
+			e.target.parentNode.childNodes.forEach(
+				(child) => (child.className = 'product-attribute-swatch'),
+			);
+			e.target.className = 'product-attribute-swatch-active';
+		}
+
+		//to set active attributes, reset the previous active attribute/s in our data and set the newones if any changes
+		this.setState({
+			chosenAttributes:
+				this.state.chosenAttributes.length === 0
+					? [
+							{
+								name: name,
+								value: value,
+							},
+					  ]
+					: [
+							...this.state.chosenAttributes.filter((att) => att.name !== name),
+							{
+								name: name,
+								value: value,
+							},
+					  ],
+		});
 	};
 
 	render() {
 		const { prices, name, brand, attributes, gallery, description } =
 			this.state.product;
 		const { currency } = this.props;
-		const { primaryImg } = this.state;
+		const { primaryImg, chosenAttributes } = this.state;
 		const createMarkup = () => {
 			return { __html: description };
 		};
-
+		console.log(chosenAttributes);
+		// chosenAttributes.
 		return (
 			<>
 				{gallery ? (
@@ -101,12 +136,16 @@ class ProductProfile extends PureComponent {
 												<div key={i} className='product-attributes-box'>
 													{attribute.items.map((item, index) => (
 														<div
+															attribute={attribute.name}
+															attributeval={item.value}
+															// name={item.value}
+															onClick={(e) => this.handleAttributeClick(e)}
 															style={{
 																background: `${item.value}`,
 																width: '63px',
 																height: '45px',
 															}}
-															className='product-attribute'
+															className='product-attribute-swatch'
 															key={index}></div>
 													))}
 												</div>
@@ -118,7 +157,12 @@ class ProductProfile extends PureComponent {
 													className='product-attribute-name'>{`${attributes[i].name}:`}</p>
 												<div key={i} className='product-attributes-box'>
 													{attribute.items.map((item, index) => (
-														<p className='product-attribute' key={index}>
+														<p
+															attribute={attribute.name}
+															attributeval={item.value}
+															onClick={(e) => this.handleAttributeClick(e)}
+															className='product-attribute'
+															key={index}>
 															{item.value}
 														</p>
 													))}
@@ -126,12 +170,12 @@ class ProductProfile extends PureComponent {
 											</div>
 										),
 									)}
-								<p>price:</p>
+								<p className='product-attribute-name'>price:</p>
 								{typeof prices !== 'undefined' &&
 									prices.map(
 										(price, i) =>
 											price.currency.label === currency[0].label && (
-												<p key={i}>
+												<p className='product-price' key={i}>
 													{`${price.currency.symbol}${price.amount}`}
 												</p>
 											),
