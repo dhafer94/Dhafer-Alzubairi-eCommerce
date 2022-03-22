@@ -113,6 +113,12 @@
 					@extend .product-attribute-swatch;
 					border: 3px solid #5ece7b;
 				}
+
+				& .product-attribute-out-of-stock {
+					@extend .product-attribute;
+					opacity: 0.5;
+					cursor: auto;
+				}
 			}
 
 			& .product-price {
@@ -146,6 +152,11 @@
 			flex: none;
 			order: 0;
 			flex-grow: 0;
+		}
+		& .add-to-cart-btn-inactive {
+			@extend .add-to-cart-btn;
+			opacity: 0.5;
+			cursor: auto;
 		}
 
 		& .product-description-box {

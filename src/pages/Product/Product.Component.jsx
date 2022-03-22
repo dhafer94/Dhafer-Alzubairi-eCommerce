@@ -6,6 +6,8 @@ import {
 	CurrencyContext,
 	AllDataContext,
 	DataFetchedContext,
+	HandleAddToCartContext,
+	HandleAttributeClickContext,
 } from '../../contexts';
 
 class Product extends PureComponent {
@@ -16,32 +18,44 @@ class Product extends PureComponent {
 	render() {
 		return (
 			<div className='product-profile'>
-				<CurrencyContext.Consumer>
-					{(currency) => (
-						<DataFetchedContext.Consumer>
-							{(dataFetched) => (
-								<AllDataContext.Consumer>
-									{(allData) => (
-										<CurrencyContext.Consumer>
-											{(currency) => (
-												<CategoryProductsContext.Consumer>
-													{(products) => (
-														<ProductProfile
-															currency={currency}
-															products={products}
-															allData={allData}
-															dataFetched={dataFetched}
-														/>
+				<HandleAttributeClickContext.Consumer>
+					{(handleAttributeClick) => (
+						<HandleAddToCartContext.Consumer>
+							{(handleAddToCart) => (
+								<CurrencyContext.Consumer>
+									{(currency) => (
+										<DataFetchedContext.Consumer>
+											{(dataFetched) => (
+												<AllDataContext.Consumer>
+													{(allData) => (
+														<CurrencyContext.Consumer>
+															{(currency) => (
+																<CategoryProductsContext.Consumer>
+																	{(products) => (
+																		<ProductProfile
+																			currency={currency}
+																			products={products}
+																			allData={allData}
+																			dataFetched={dataFetched}
+																			handleAddToCart={handleAddToCart}
+																			handleAttributeClick={
+																				handleAttributeClick
+																			}
+																		/>
+																	)}
+																</CategoryProductsContext.Consumer>
+															)}
+														</CurrencyContext.Consumer>
 													)}
-												</CategoryProductsContext.Consumer>
+												</AllDataContext.Consumer>
 											)}
-										</CurrencyContext.Consumer>
+										</DataFetchedContext.Consumer>
 									)}
-								</AllDataContext.Consumer>
+								</CurrencyContext.Consumer>
 							)}
-						</DataFetchedContext.Consumer>
+						</HandleAddToCartContext.Consumer>
 					)}
-				</CurrencyContext.Consumer>
+				</HandleAttributeClickContext.Consumer>
 			</div>
 		);
 	}

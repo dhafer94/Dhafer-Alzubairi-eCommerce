@@ -7,7 +7,10 @@ import {
 	CategoryProductsContext,
 	CurrencyContext,
 	AllDataContext,
-	DataFetchedContext, ChosenCategoryContext
+	DataFetchedContext,
+	ChosenCategoryContext,
+	HandleAddToCartContext,
+	HandleAttributeClickContext
 } from './contexts';
 import { withRouter } from './withRouter';
 
@@ -16,11 +19,14 @@ class App extends PureComponent {
 		super(props);
 		this.state = {
 			allData: [],
-			categoriesNames: [],
 			products: [],
+			categoriesNames: [],
+			productsToBeShown: [],
 			currency: [],
 			dataFetched: false,
-			dropdown: 'inactive'
+			dropdown: 'inactive',
+			chosenAttributes: [],
+			cart: [],
 		};
 	}
 
@@ -62,10 +68,11 @@ class App extends PureComponent {
 			})
 			.then((res) => {
 				if (!this.state.dataFetched) {
+
 					this.setState({
 						allData: res.data.categories.map((item) => item),
 						categoriesNames: res.data.categories.map((item) => item.name),
-						products: res.data.categories[0].products,
+						productsToBeShown: res.data.categories[0].products,
 						currency: res.data.categories[0].products[0].prices.map(
 							(item, i) => {
 								return {
@@ -76,6 +83,9 @@ class App extends PureComponent {
 							},
 						),
 						dataFetched: true,
+						//all products with duplicates if they exist in other categories
+						products: res.data.categories.map((item) => item.products).flat(Infinity)
+
 					});
 				}
 			});
@@ -86,12 +96,14 @@ class App extends PureComponent {
 
 	componentDidUpdate() {
 		if (this.state.dataFetched && this.props.router.location.pathname === `/plp/${this.props.router.params.plp}`) {
-			const products = this.state.allData.filter((category) => {
+			const productsToBeShown = this.state.allData.filter((category) => {
 				return category.name === this.props.router.params.plp && category.products;
 			})[0].products;
+			// console.log(products);
 
 			return this.setState({
-				products: products,
+				productsToBeShown: productsToBeShown,
+				// products: products
 			});
 		}
 		if (this.props.router.location.pathname === '/') {
@@ -114,6 +126,81 @@ class App extends PureComponent {
 		}
 	};
 
+	handleAttributeClick = (e) => {
+		const name = e.target.attributes.attribute.nodeValue;
+		const value = e.target.attributes.attributeval.nodeValue;
+
+		//to reset the previous active attribute/s and visually set the active attribute visually
+		if (e.target.className === 'product-attribute') {
+			e.target.parentNode.childNodes.forEach(
+				(child) => (child.className = 'product-attribute'),
+			);
+			e.target.className = 'product-attribute-active';
+		}
+		if (e.target.className === 'product-attribute-swatch') {
+			e.target.parentNode.childNodes.forEach(
+				(child) => (child.className = 'product-attribute-swatch'),
+			);
+			e.target.className = 'product-attribute-swatch-active';
+		}
+
+		//to set active attributes, reset the previous active attribute/s in our data and set the newones if any changes
+		this.setState({
+			chosenAttributes:
+				this.state.chosenAttributes.length === 0
+					? [
+						{
+							name: name,
+							value: value,
+						},
+					]
+					: [
+						...this.state.chosenAttributes.filter((att) => att.name !== name),
+						{
+							name: name,
+							value: value,
+						},
+					],
+		});
+	};
+
+
+	handleAddToCart = (e) => {
+		const products = this.state.products;
+		const AddedProductId = e.target.id;
+		const chosenAttributes = this.state.chosenAttributes;
+		const AddedProduct = products.find((product) => product.id === AddedProductId);
+		const { name, brand, prices, attributes } = AddedProduct;
+
+		//To only add the product to the cart when attributes has been chosen
+		//a popup to choose the correct one can be shown to the user otherwise, in the meantime an alert is implemented
+		if (chosenAttributes.length > 0 && chosenAttributes.length === attributes.length) {
+			this.setState({
+				cart: [...this.state.cart, {
+					name: name,
+					brand: brand,
+					prices: prices,
+					attributes: chosenAttributes
+
+				}]
+			});
+		} else {
+			const chosenAttributesNames = chosenAttributes.map((att) => att.name);
+			const notAddedAttributes = attributes.map((att) => att.name).filter((attr) => !chosenAttributesNames.includes(attr));
+
+			if (notAddedAttributes.length === 1) {
+				const alert = notAddedAttributes.map((att) => att);
+				window.alert(`Please select one of the available options for your ${name}:\n${alert.map((att) => ` ${att}`)
+					} `);
+			} else {
+				const alert = notAddedAttributes.map((att) => att);
+				window.alert(`Please select one of the available options for your ${name}:\n${alert.map((att) => ` ${att}`).slice(0, -1)} and ${alert[alert.length - 1]
+					} `);
+
+			}
+		}
+	};
+
 	//Listen to clicks anywhere on the page to control dropdown active, inactive state
 	handleClicksForDropDown = (e) => {
 		const activeClass = 'currency-container active-bg';
@@ -131,34 +218,38 @@ class App extends PureComponent {
 	};
 
 	render() {
-		const { products, currency, dataFetched, allData, dropdown } = this.state;
+		const { productsToBeShown, currency, dataFetched, allData, dropdown, cart } = this.state;
+		const chosenCategory = this.props.router.params.plp;
 		const selectedCurrency = this.state.currency.filter(
 			(item) => item.selected === true,
 		);
-		// console.log(this.props.router.params.plp);
-
+		// console.log(cart);
 		return (
 			<div onClick={(e) => this.handleClicksForDropDown(e)} className='App' >
 				<Navigation
-					// chosenCategory={this.props.router.params.plp}
 					categoriesNames={this.state.categoriesNames}
 					currency={currency}
 					handleCurrencyClick={this.handleCurrencyClick}
 					dataFetched={dataFetched}
 					selectedCurrency={selectedCurrency}
 					dropdown={dropdown}
+					cart={cart}
 				/>
-				<ChosenCategoryContext.Provider value={this.props.router.params.plp}>
-					<DataFetchedContext.Provider value={dataFetched}>
-						<AllDataContext.Provider value={allData}>
-							<CurrencyContext.Provider value={selectedCurrency}>
-								<CategoryProductsContext.Provider value={products}>
-									<Outlet />
-								</CategoryProductsContext.Provider>
-							</CurrencyContext.Provider>
-						</AllDataContext.Provider>
-					</DataFetchedContext.Provider>
-				</ChosenCategoryContext.Provider>
+				<HandleAttributeClickContext.Provider value={this.handleAttributeClick}>
+					<HandleAddToCartContext.Provider value={this.handleAddToCart}>
+						<ChosenCategoryContext.Provider value={chosenCategory}>
+							<DataFetchedContext.Provider value={dataFetched}>
+								<AllDataContext.Provider value={allData}>
+									<CurrencyContext.Provider value={selectedCurrency}>
+										<CategoryProductsContext.Provider value={productsToBeShown}>
+											<Outlet />
+										</CategoryProductsContext.Provider>
+									</CurrencyContext.Provider>
+								</AllDataContext.Provider>
+							</DataFetchedContext.Provider>
+						</ChosenCategoryContext.Provider>
+					</HandleAddToCartContext.Provider>
+				</HandleAttributeClickContext.Provider>
 			</div>
 		);
 	}

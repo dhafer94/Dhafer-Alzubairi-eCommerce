@@ -24,13 +24,13 @@ class ProductCard extends PureComponent {
 
 	render() {
 		const { currency, product, category } = this.props;
-		const { id, name, gallery, prices } = product;
+		const { id, name, gallery, prices, inStock } = product;
 		const img = gallery[0];
 		const price = prices.find((i) => currency[0].label === i.currency.label);
-
+		console.log(inStock);
 		return (
 			<NavLink
-				className='product-card'
+				className={inStock ? 'product-card' : 'product-card-out-of-stock'}
 				id={id}
 				to={`/plp/${category}/${id}`}
 				onMouseEnter={this.handleMouseEnter}
@@ -103,6 +103,9 @@ class ProductCard extends PureComponent {
 					// width='350px'
 					height='330px'
 				/>
+				{!inStock ? (
+					<div className='product-out-of-Stock-txt'>out of Stock</div>
+				) : null}
 
 				<div className='product-info'>
 					<p className='product-title' id={id}>

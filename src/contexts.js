@@ -10,4 +10,11 @@ export const DataFetchedContext = React.createContext();
 
 export const ChosenCategoryContext = React.createContext();
 
+export const HandleAddToCartContext = React.createContext();
+
+export const HandleAttributeClickContext = React.createContext();
+
+
+
+
 

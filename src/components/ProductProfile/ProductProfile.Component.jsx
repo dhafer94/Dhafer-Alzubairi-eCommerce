@@ -11,7 +11,6 @@ class ProductProfile extends PureComponent {
 			category: this.props.router.params.plp,
 			product: {},
 			primaryImg: '',
-			chosenAttributes: [],
 		};
 	}
 	componentDidMount() {
@@ -45,53 +44,23 @@ class ProductProfile extends PureComponent {
 		});
 	};
 
-	handleAttributeClick = (e) => {
-		const name = e.target.attributes.attribute.nodeValue;
-		const value = e.target.attributes.attributeval.nodeValue;
-
-		//to reset the previous active attribute/s and visually set the active attribute visually
-		if (e.target.className === 'product-attribute') {
-			e.target.parentNode.childNodes.forEach(
-				(child) => (child.className = 'product-attribute'),
-			);
-			e.target.className = 'product-attribute-active';
-		}
-		if (e.target.className === 'product-attribute-swatch') {
-			e.target.parentNode.childNodes.forEach(
-				(child) => (child.className = 'product-attribute-swatch'),
-			);
-			e.target.className = 'product-attribute-swatch-active';
-		}
-
-		//to set active attributes, reset the previous active attribute/s in our data and set the newones if any changes
-		this.setState({
-			chosenAttributes:
-				this.state.chosenAttributes.length === 0
-					? [
-							{
-								name: name,
-								value: value,
-							},
-					  ]
-					: [
-							...this.state.chosenAttributes.filter((att) => att.name !== name),
-							{
-								name: name,
-								value: value,
-							},
-					  ],
-		});
-	};
-
 	render() {
-		const { prices, name, brand, attributes, gallery, description } =
-			this.state.product;
-		const { currency } = this.props;
-		const { primaryImg, chosenAttributes } = this.state;
+		const {
+			prices,
+			name,
+			brand,
+			attributes,
+			gallery,
+			description,
+			id,
+			inStock,
+		} = this.state.product;
+		const { currency, handleAttributeClick } = this.props;
+		const { primaryImg } = this.state;
 		const createMarkup = () => {
 			return { __html: description };
 		};
-		// console.log(description);
+
 		return (
 			<>
 				{gallery ? (
@@ -126,7 +95,7 @@ class ProductProfile extends PureComponent {
 								{typeof attributes !== 'undefined' &&
 									attributes.map((attribute, i) =>
 										attribute.type === 'swatch' ? (
-											<>
+											<div key={i}>
 												<p
 													key={i + 10}
 													className='product-attribute-name'>{`${attributes[i].name}:`}</p>
@@ -135,17 +104,21 @@ class ProductProfile extends PureComponent {
 														<div
 															attribute={attribute.name}
 															attributeval={item.value}
-															onClick={(e) => this.handleAttributeClick(e)}
+															onClick={(e) => handleAttributeClick(e)}
 															style={{
 																background: `${item.value}`,
 																width: '63px',
 																height: '45px',
 															}}
-															className='product-attribute-swatch'
+															className={
+																inStock
+																	? 'product-attribute-swatch'
+																	: 'product-attribute-out-of-stock'
+															}
 															key={index}></div>
 													))}
 												</div>
-											</>
+											</div>
 										) : (
 											<div key={i + 20}>
 												<p
@@ -156,8 +129,12 @@ class ProductProfile extends PureComponent {
 														<p
 															attribute={attribute.name}
 															attributeval={item.value}
-															onClick={(e) => this.handleAttributeClick(e)}
-															className='product-attribute'
+															onClick={(e) => handleAttributeClick(e)}
+															className={
+																inStock
+																	? 'product-attribute'
+																	: 'product-attribute-out-of-stock'
+															}
 															key={index}>
 															{item.value}
 														</p>
@@ -176,7 +153,19 @@ class ProductProfile extends PureComponent {
 												</p>
 											),
 									)}
-								<button className='add-to-cart-btn'>Add to Cart</button>
+								{inStock ? (
+									<button
+										onClick={this.props.handleAddToCart}
+										id={id}
+										className='add-to-cart-btn'>
+										Add to Cart
+									</button>
+								) : (
+									<button className='add-to-cart-btn-inactive'>
+										out of stock
+									</button>
+								)}
+
 								<div
 									className='product-description-box'
 									dangerouslySetInnerHTML={createMarkup()}

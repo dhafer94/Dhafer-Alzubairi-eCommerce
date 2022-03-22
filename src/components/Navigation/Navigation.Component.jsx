@@ -17,7 +17,9 @@ class Navigation extends PureComponent {
 			handleCurrencyClick,
 			selectedCurrency,
 			dropdown,
+			cart,
 		} = this.props;
+		// console.log(cart);
 
 		return (
 			<nav className='navbar'>
@@ -111,6 +113,9 @@ class Navigation extends PureComponent {
 								fill='#43464E'
 							/>
 						</svg>
+						{cart.length > 0 ? (
+							<div className='cart-number'>{cart.length}</div>
+						) : null}
 					</NavLink>
 				</div>
 			</nav>
