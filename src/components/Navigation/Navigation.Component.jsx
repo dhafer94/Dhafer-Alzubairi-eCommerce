@@ -18,7 +18,6 @@ class Navigation extends PureComponent {
 			selectedCurrency,
 			dropdown,
 		} = this.props;
-		// console.log(this.props);
 
 		return (
 			<nav className='navbar'>

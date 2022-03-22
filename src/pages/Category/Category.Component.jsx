@@ -5,6 +5,7 @@ import {
 	CategoryProductsContext,
 	CurrencyContext,
 	DataFetchedContext,
+	ChosenCategoryContext,
 } from '../../contexts';
 import { withRouter } from '../../withRouter';
 
@@ -17,23 +18,28 @@ class Category extends PureComponent {
 		// console.log(this.props);
 		return (
 			<div className='category-page'>
-				<DataFetchedContext.Consumer>
-					{(dataFetched) => (
-						<CurrencyContext.Consumer>
-							{(currency) => (
-								<CategoryProductsContext.Consumer>
-									{(products) => (
-										<Directory
-											currency={currency}
-											products={products}
-											dataFetched={dataFetched}
-										/>
+				<ChosenCategoryContext.Consumer>
+					{(category) => (
+						<DataFetchedContext.Consumer>
+							{(dataFetched) => (
+								<CurrencyContext.Consumer>
+									{(currency) => (
+										<CategoryProductsContext.Consumer>
+											{(products) => (
+												<Directory
+													currency={currency}
+													products={products}
+													dataFetched={dataFetched}
+													category={category}
+												/>
+											)}
+										</CategoryProductsContext.Consumer>
 									)}
-								</CategoryProductsContext.Consumer>
+								</CurrencyContext.Consumer>
 							)}
-						</CurrencyContext.Consumer>
+						</DataFetchedContext.Consumer>
 					)}
-				</DataFetchedContext.Consumer>
+				</ChosenCategoryContext.Consumer>
 			</div>
 		);
 	}

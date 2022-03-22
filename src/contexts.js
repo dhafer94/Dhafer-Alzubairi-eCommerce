@@ -8,3 +8,6 @@ export const AllDataContext = React.createContext();
 
 export const DataFetchedContext = React.createContext();
 
+export const ChosenCategoryContext = React.createContext();
+
+

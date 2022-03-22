@@ -135,7 +135,6 @@ class ProductProfile extends PureComponent {
 														<div
 															attribute={attribute.name}
 															attributeval={item.value}
-															// name={item.value}
 															onClick={(e) => this.handleAttributeClick(e)}
 															style={{
 																background: `${item.value}`,

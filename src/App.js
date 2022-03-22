@@ -6,7 +6,8 @@ import { gql } from '@apollo/client';
 import {
 	CategoryProductsContext,
 	CurrencyContext,
-	AllDataContext, DataFetchedContext
+	AllDataContext,
+	DataFetchedContext, ChosenCategoryContext
 } from './contexts';
 import { withRouter } from './withRouter';
 
@@ -134,10 +135,12 @@ class App extends PureComponent {
 		const selectedCurrency = this.state.currency.filter(
 			(item) => item.selected === true,
 		);
+		// console.log(this.props.router.params.plp);
 
 		return (
 			<div onClick={(e) => this.handleClicksForDropDown(e)} className='App' >
 				<Navigation
+					// chosenCategory={this.props.router.params.plp}
 					categoriesNames={this.state.categoriesNames}
 					currency={currency}
 					handleCurrencyClick={this.handleCurrencyClick}
@@ -145,15 +148,17 @@ class App extends PureComponent {
 					selectedCurrency={selectedCurrency}
 					dropdown={dropdown}
 				/>
-				<DataFetchedContext.Provider value={dataFetched}>
-					<AllDataContext.Provider value={allData}>
-						<CurrencyContext.Provider value={selectedCurrency}>
-							<CategoryProductsContext.Provider value={products}>
-								<Outlet />
-							</CategoryProductsContext.Provider>
-						</CurrencyContext.Provider>
-					</AllDataContext.Provider>
-				</DataFetchedContext.Provider>
+				<ChosenCategoryContext.Provider value={this.props.router.params.plp}>
+					<DataFetchedContext.Provider value={dataFetched}>
+						<AllDataContext.Provider value={allData}>
+							<CurrencyContext.Provider value={selectedCurrency}>
+								<CategoryProductsContext.Provider value={products}>
+									<Outlet />
+								</CategoryProductsContext.Provider>
+							</CurrencyContext.Provider>
+						</AllDataContext.Provider>
+					</DataFetchedContext.Provider>
+				</ChosenCategoryContext.Provider>
 			</div>
 		);
 	}

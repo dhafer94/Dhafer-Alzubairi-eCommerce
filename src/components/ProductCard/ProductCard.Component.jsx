@@ -21,12 +21,13 @@ class ProductCard extends PureComponent {
 			isHovering: false,
 		}));
 	};
+
 	render() {
-		const { currency, product } = this.props;
-		const { id, name, gallery, prices, category } = product;
+		const { currency, product, category } = this.props;
+		const { id, name, gallery, prices } = product;
 		const img = gallery[0];
 		const price = prices.find((i) => currency[0].label === i.currency.label);
-		// console.log(currency[0]);
+
 		return (
 			<NavLink
 				className='product-card'

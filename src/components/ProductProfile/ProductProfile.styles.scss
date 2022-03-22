@@ -4,6 +4,7 @@
 	// margin-top: 11vh;
 
 	margin: auto;
+	margin-top: 2vh;
 	position: relative;
 	display: flex;
 	flex-direction: row;
@@ -75,7 +76,6 @@
 			& .product-attributes-box {
 				display: flex;
 				flex-direction: row;
-
 				& .product-attribute {
 					@extend .product-name;
 					display: flex;
