@@ -104,6 +104,7 @@ class ProductProfile extends PureComponent {
 														<div
 															attribute={attribute.name}
 															attributeval={item.value}
+															id={id}
 															onClick={(e) => handleAttributeClick(e)}
 															style={{
 																background: `${item.value}`,
@@ -129,6 +130,7 @@ class ProductProfile extends PureComponent {
 														<p
 															attribute={attribute.name}
 															attributeval={item.value}
+															id={id}
 															onClick={(e) => handleAttributeClick(e)}
 															className={
 																inStock

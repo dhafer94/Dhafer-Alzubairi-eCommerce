@@ -27,7 +27,6 @@ class ProductCard extends PureComponent {
 		const { id, name, gallery, prices, inStock } = product;
 		const img = gallery[0];
 		const price = prices.find((i) => currency[0].label === i.currency.label);
-		console.log(inStock);
 		return (
 			<NavLink
 				className={inStock ? 'product-card' : 'product-card-out-of-stock'}

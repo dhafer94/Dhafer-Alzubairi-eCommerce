@@ -129,7 +129,8 @@ class App extends PureComponent {
 	handleAttributeClick = (e) => {
 		const name = e.target.attributes.attribute.nodeValue;
 		const value = e.target.attributes.attributeval.nodeValue;
-
+		const id = e.target.id;
+		// console.log(id);
 		//to reset the previous active attribute/s and visually set the active attribute visually
 		if (e.target.className === 'product-attribute') {
 			e.target.parentNode.childNodes.forEach(
@@ -150,6 +151,7 @@ class App extends PureComponent {
 				this.state.chosenAttributes.length === 0
 					? [
 						{
+							id: id,
 							name: name,
 							value: value,
 						},
@@ -157,6 +159,7 @@ class App extends PureComponent {
 					: [
 						...this.state.chosenAttributes.filter((att) => att.name !== name),
 						{
+							id: id,
 							name: name,
 							value: value,
 						},
@@ -166,24 +169,54 @@ class App extends PureComponent {
 
 
 	handleAddToCart = (e) => {
-		const products = this.state.products;
+		const { products, cart } = this.state;
 		const AddedProductId = e.target.id;
-		const chosenAttributes = this.state.chosenAttributes;
+		const chosenAttributes = this.state.chosenAttributes.filter((item) => item.id === AddedProductId);
 		const AddedProduct = products.find((product) => product.id === AddedProductId);
-		const { name, brand, prices, attributes } = AddedProduct;
+		const { name, brand, prices, attributes, id } = AddedProduct;
+		// console.log('chosenAttributes');
 
 		//To only add the product to the cart when attributes has been chosen
 		//a popup to choose the correct one can be shown to the user otherwise, in the meantime an alert is implemented
-		if (chosenAttributes.length > 0 && chosenAttributes.length === attributes.length) {
-			this.setState({
-				cart: [...this.state.cart, {
-					name: name,
-					brand: brand,
-					prices: prices,
-					attributes: chosenAttributes
+		if (chosenAttributes.length === attributes.length) {
+			if (cart.length > 0) {
+				if (cart.some((item) => item.id === AddedProductId)) {
+					cart.forEach((item) => {
+						if (item.id === AddedProductId) {
+							item.quantity += 1;
+						}
+					});
+				}
+				else {
+					this.setState({
+						cart: [...this.state.cart,
+						{
+							name: name,
+							brand: brand,
+							prices: prices,
+							id: id,
+							attributes: chosenAttributes,
+							quantity: 1
 
-				}]
-			});
+						}
+						]
+					});
+
+				}
+			} else {
+				this.setState({
+					cart: [...this.state.cart, {
+						name: name,
+						brand: brand,
+						prices: prices,
+						id: id,
+						attributes: chosenAttributes,
+						quantity: 1
+
+					}]
+				});
+			}
+
 		} else {
 			const chosenAttributesNames = chosenAttributes.map((att) => att.name);
 			const notAddedAttributes = attributes.map((att) => att.name).filter((attr) => !chosenAttributesNames.includes(attr));
@@ -223,7 +256,7 @@ class App extends PureComponent {
 		const selectedCurrency = this.state.currency.filter(
 			(item) => item.selected === true,
 		);
-		// console.log(cart);
+		console.log(cart);
 		return (
 			<div onClick={(e) => this.handleClicksForDropDown(e)} className='App' >
 				<Navigation

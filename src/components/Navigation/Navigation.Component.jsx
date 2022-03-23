@@ -3,6 +3,7 @@ import './Navigation.styles.scss';
 import Currency from '../Currency/Currency.Component';
 import { NavLink } from 'react-router-dom';
 import { withRouter } from '../../withRouter';
+import { myCart } from './myCart';
 
 class Navigation extends PureComponent {
 	constructor(props) {
@@ -19,6 +20,7 @@ class Navigation extends PureComponent {
 			dropdown,
 			cart,
 		} = this.props;
+
 		// console.log(cart);
 
 		return (
@@ -93,7 +95,8 @@ class Navigation extends PureComponent {
 						selectedCurrency={selectedCurrency}
 						dropdown={dropdown}
 					/>
-					<NavLink to='/cart' className='navbar-cart'>
+					<div className='navbar-cart'>
+						{/* <NavLink to='/cart' className='navbar-cart'></NavLink> */}
 						<svg
 							xmlns='http://www.w3.org/2000/svg'
 							width='25'
@@ -116,7 +119,8 @@ class Navigation extends PureComponent {
 						{cart.length > 0 ? (
 							<div className='cart-number'>{cart.length}</div>
 						) : null}
-					</NavLink>
+						<div className='cart-overlay'></div>
+					</div>
 				</div>
 			</nav>
 		);
