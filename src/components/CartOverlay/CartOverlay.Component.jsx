@@ -8,105 +8,93 @@ class CartOverlay extends PureComponent {
 	}
 
 	render() {
-		const { cart, currency } = this.props;
+		const { cart, currency, handleIncrementDecrement, dropdown } = this.props;
 		const carty = myCart;
-		console.log(carty[0].gallery[0]);
+		// console.log(dropdown);
 
 		return (
-			<div className='cart-overlay'>
+			<div
+				id='cart-overlay'
+				className={
+					dropdown === 'active' ? 'cart-overlay' : 'cart-overlay-invisible'
+				}>
 				<h2 className='cart-overlay-title'>
-					My Bag{' '}
+					my Bag{' '}
 					<span className='cart-overlay-products-count'>
-						{`${carty.length ? carty.length : 'no'}`} items
+						{`${cart.length ? cart.length : 'no'}`} items
 					</span>
 				</h2>
-				{carty.length > 0
-					? carty.map((item, i) => (
-							<div key={i} className='cart-overlay-item-container'>
-								{' '}
-								<div>
-									<h3 className='cart-overlay-item-title'>
-										{item.brand}
-										<br />
-										{item.name}
-									</h3>
-									{currency.length > 0
-										? item.prices.map(
-												(price, i) =>
-													price.currency.label === currency[0].label && (
-														<p className='cart-overlay-item-price' key={i}>
-															{`${price.currency.symbol}${price.amount}`}
-														</p>
-													),
-										  )
-										: null}
-								</div>
-								<div className='cart-overlay-item-right-container'>
-									<div className='cart-overlay-item-mid-container'>
-										<svg
-											className='cart-overlay-item-increase'
-											width='24'
-											height='24'
-											viewBox='0 0 24 24'
-											fill='none'
-											xmlns='http://www.w3.org/2000/svg'>
-											<path
-												d='M12 8V16'
-												stroke='#1D1F22'
-												stroke-linecap='round'
-												stroke-linejoin='round'
-											/>
-											<path
-												d='M8 12H16'
-												stroke='#1D1F22'
-												stroke-linecap='round'
-												stroke-linejoin='round'
-											/>
-											<rect
-												x='0.5'
-												y='0.5'
-												width='23'
-												height='23'
-												stroke='#1D1F22'
-											/>
-										</svg>
-										<p className='cart-overlay-item-quantity'>
-											{item.quantity}
-										</p>
-										<svg
-											className='cart-overlay-item-decrease'
-											width='24'
-											height='24'
-											viewBox='0 0 24 24'
-											fill='none'
-											xmlns='http://www.w3.org/2000/svg'>
-											<path
-												d='M8 12H16'
-												stroke='#1D1F22'
-												stroke-linecap='round'
-												stroke-linejoin='round'
-											/>
-											<rect
-												x='0.5'
-												y='0.5'
-												width='23'
-												height='23'
-												stroke='#1D1F22'
-											/>
-										</svg>
+				<div
+					className={
+						cart.length <= 1
+							? 'cart-overlay-items-main-container-mini'
+							: 'cart-overlay-items-main-container'
+					}>
+					{cart.length > 0
+						? cart.map((item, i) => (
+								<div key={i} className={'cart-overlay-item-container'}>
+									{' '}
+									<div className='cart-overlay-item-left-container'>
+										<h3 className='cart-overlay-item-title'>
+											{item.brand}
+											<br />
+											{item.name}
+										</h3>
+										{currency.length > 0
+											? item.prices.map(
+													(price, i) =>
+														price.currency.label === currency[0].label && (
+															<p className='cart-overlay-item-price' key={i}>
+																{`${price.currency.symbol}${price.amount}`}
+															</p>
+														),
+											  )
+											: null}
+										<div className='cart-overlay-item-attributes-container'>
+											<div className='cart-overlay-item-attribute-box'>s</div>
+											<div className='cart-overlay-item-attribute-box'>s</div>
+										</div>
 									</div>
-									<img
-										src={item.gallery[0]}
-										className='cart-overlay-item-img'
-										alt={item.name}
-									/>
+									<div className='cart-overlay-item-right-container'>
+										<div className='cart-overlay-item-mid-container'>
+											<button
+												id={item.id}
+												name='increment'
+												onClick={handleIncrementDecrement}
+												className='cart-overlay-item-attribute-increment-decrement'>
+												+
+											</button>
+
+											<p className='cart-overlay-item-quantity'>
+												{item.quantity}
+											</p>
+											<button
+												id={item.id}
+												name='decrement'
+												onClick={handleIncrementDecrement}
+												className='cart-overlay-item-attribute-increment-decrement'>
+												-
+											</button>
+										</div>
+										<img
+											src={item.gallery[0]}
+											className='cart-overlay-item-img'
+											alt={item.name}
+										/>
+									</div>
 								</div>
-							</div>
-					  ))
-					: null}
-				{/* <div className='cart-overlay-item-container'></div> */}
-				{/* <div className='cart-overlay-item-container'></div> */}
-				<div className='cart-overlay-total-price'>total</div>
+						  ))
+						: null}
+				</div>
+
+				<div className='cart-overlay-total-price-container'>
+					<div className='cart-overlay-total-price-text'>total</div>
+					<div className='cart-overlay-total-price-amount'>$1329</div>
+				</div>
+				<div className='cart-overlay-total-price-container'>
+					<button className='cart-overlay-view-btn'>view bag</button>
+					<button className='cart-overlay-checkout-btn'>checkout</button>
+				</div>
 			</div>
 		);
 	}

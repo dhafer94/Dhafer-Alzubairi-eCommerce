@@ -10,11 +10,19 @@ class Currency extends PureComponent {
 	}
 
 	render() {
-		const { handleCurrencyClick, currency, dataFetched, dropdown } = this.props;
+		const {
+			handleCurrencyClick,
+			currency,
+			dataFetched,
+			dropdown,
+			handleClicksForDropDown,
+		} = this.props;
 		let selectedCurrency = currency.filter((item) => item.selected);
 
 		return (
 			<div
+				onClick={handleClicksForDropDown}
+				id='navbar-currency'
 				className={
 					dropdown === 'active'
 						? 'currency-container active-bg'
@@ -24,6 +32,7 @@ class Currency extends PureComponent {
 					<>
 						{typeof selectedCurrency[0] !== 'undefined' && (
 							<option
+								id='navbar-currency'
 								className='currency-placeholder'
 								{...selectedCurrency[0].selected}
 								value={selectedCurrency[0].label}>

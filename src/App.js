@@ -14,8 +14,6 @@ import {
 	HandleAttributeClickContext
 } from './contexts';
 import { withRouter } from './withRouter';
-import Currency from './components/Currency/Currency.Component';
-import { addTypenameToDocument } from '@apollo/client/utilities';
 
 class App extends PureComponent {
 	constructor(props) {
@@ -27,7 +25,10 @@ class App extends PureComponent {
 			productsToBeShown: [],
 			currency: [],
 			dataFetched: false,
-			dropdown: 'inactive',
+			dropdown: {
+				currency: 'inactive',
+				cartOverlay: 'inactive'
+			},
 			chosenAttributes: [],
 			cart: [],
 		};
@@ -179,10 +180,9 @@ class App extends PureComponent {
 		const chosenAttributes = this.state.chosenAttributes.filter((att) => att.id === AddedProductId);
 		const AddedProduct = products.find((product) => product.id === AddedProductId);
 		const { name, brand, prices, attributes, id, gallery } = AddedProduct;
-		console.log(gallery);
+
 		//To only add the product to the cart when attributes has been chosen
 		//a popup to choose the correct one can be shown to the user otherwise, in the meantime an alert is implemented
-
 		if (chosenAttributes.length === attributes.length) {
 			if (cart.length > 0) {
 				if (cart.some((item) => item.id === AddedProductId)) {
@@ -243,7 +243,7 @@ class App extends PureComponent {
 		} else {
 			const chosenAttributesNames = chosenAttributes.map((att) => att.id === AddedProductId).map((att) => att.name);
 			const notAddedAttributes = attributes.map(att => att.name).filter((attr) => !chosenAttributesNames.includes(attr));
-			console.log(chosenAttributesNames, 'chosenAttributesNames');
+
 			if (notAddedAttributes.length === 1) {
 				const alert = notAddedAttributes.map(att => att);
 				window.alert(`Please select one of the available options for your ${name}:\n${alert.map((att) => ` ${att}`)
@@ -259,17 +259,69 @@ class App extends PureComponent {
 	};
 
 	//Listen to clicks anywhere on the page to control dropdown active, inactive state
+	//Added the cart for the same action and refactored the code using id in s
 	handleClicksForDropDown = (e) => {
-		const activeClass = 'currency-container active-bg';
-		const inactiveClass = 'currency-container inactive-bg';
+		const id = e.target.id;
+		const { dropdown } = this.state;
+		const cartId = 'navbar-cart';
+		const currencyId = 'navbar-currency';
+		// console.log(id);
 
-		if (e.target.className === inactiveClass || e.target.parentNode.className === inactiveClass) {
-			this.setState({ dropdown: 'active' });
-		} else if (e.target.className === activeClass || e.target.parentNode.className === activeClass) {
-			this.setState({ dropdown: 'inactive' });
-		} else {
+		if (id === cartId && dropdown.cartOverlay === 'inactive') {
 			this.setState({
-				dropdown: this.state.dropdown === 'inactive'
+				dropdown: {
+					currency: 'inactive',
+					cartOverlay: 'active'
+				}
+			});
+		} else
+			if (id === cartId && dropdown.cartOverlay === 'active') {
+				this.setState({
+					dropdown: {
+						currency: 'inactive',
+						cartOverlay: 'inactive'
+					}
+				});
+
+			}
+		if (id === currencyId && dropdown.currency === 'inactive') {
+			this.setState({
+				dropdown: {
+					currency: 'active',
+					cartOverlay: 'inactive'
+				}
+			});
+
+		};
+
+	};
+
+	handleIncrementDecrement = (e) => {
+		// console.log(e.target.name, 'name');
+		// console.log(e.target.id, 'id');
+		const id = e.target.id;
+		const name = e.target.name;
+
+		const matchingItem = this.state.cart.filter(item =>
+			item.id === id
+		);
+
+		// console.log(matchingItem, 'matchingItem');
+
+
+	};
+
+	//to hide dropdown and cart overlay when clicking anywhere else on the page
+	resetter = (e) => {
+		const id = e.target.id;
+		const cartId = 'navbar-cart';
+		const currencyId = 'navbar-currency';
+		if (id !== cartId && id !== currencyId) {
+			this.setState({
+				dropdown: {
+					currency: 'inactive',
+					cartOverlay: 'inactive'
+				}
 			});
 		}
 	};
@@ -280,19 +332,23 @@ class App extends PureComponent {
 		const selectedCurrency = this.state.currency.filter(
 			(item) => item.selected === true,
 		);
-		console.log(cart, 'cart');
-		// console.log(chosenAttributes, 'chosenAttributes');
+		// console.log(dropdown, 'dropdown');
 
 		return (
-			<div onClick={(e) => this.handleClicksForDropDown(e)} className='App' >
+			<div
+				onClick={this.resetter}
+				className='App' >
 				<Navigation
 					categoriesNames={this.state.categoriesNames}
 					currency={currency}
 					handleCurrencyClick={this.handleCurrencyClick}
 					dataFetched={dataFetched}
 					selectedCurrency={selectedCurrency}
-					dropdown={dropdown}
+					dropdown={dropdown.currency}
 					cartLength={cart.length}
+					handleIncrementDecrement={this.handleIncrementDecrement}
+					handleClicksForDropDown={this.handleClicksForDropDown}
+					cart={cart}
 				/>
 				<HandleAttributeClickContext.Provider value={this.handleAttributeClick}>
 					<HandleAddToCartContext.Provider value={this.handleAddToCart}>
@@ -302,7 +358,12 @@ class App extends PureComponent {
 									<CurrencyContext.Provider value={selectedCurrency}>
 										<CategoryProductsContext.Provider value={productsToBeShown}>
 											<Outlet />
-											<CartOverlay currency={selectedCurrency} cart={cart} />
+											<CartOverlay
+												// id='cart-overlay'
+												dropdown={dropdown.cartOverlay}
+												handleIncrementDecrement={this.handleIncrementDecrement}
+												currency={selectedCurrency}
+												cart={cart} />
 										</CategoryProductsContext.Provider>
 									</CurrencyContext.Provider>
 								</AllDataContext.Provider>

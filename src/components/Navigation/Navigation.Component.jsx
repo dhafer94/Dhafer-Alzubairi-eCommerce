@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import './Navigation.styles.scss';
 import Currency from '../Currency/Currency.Component';
+import CartOverlay from '../CartOverlay/CartOverlay.Component';
 import { NavLink } from 'react-router-dom';
 import { withRouter } from '../../withRouter';
 
@@ -8,6 +9,9 @@ class Navigation extends PureComponent {
 	constructor(props) {
 		super(props);
 	}
+	// handleCartOverlay = (e) => {
+	// 	console.log(e);
+	// };
 
 	render() {
 		const {
@@ -18,9 +22,10 @@ class Navigation extends PureComponent {
 			selectedCurrency,
 			dropdown,
 			cartLength,
+			handleIncrementDecrement,
+			handleClicksForDropDown,
+			cart,
 		} = this.props;
-
-		// console.log(cart);
 
 		return (
 			<nav className='navbar'>
@@ -87,6 +92,7 @@ class Navigation extends PureComponent {
 				</div>
 				<div className='navbar-actions'>
 					<Currency
+						handleClicksForDropDown={handleClicksForDropDown}
 						className='navbar-currency'
 						dataFetched={dataFetched}
 						currency={currency}
@@ -94,8 +100,10 @@ class Navigation extends PureComponent {
 						selectedCurrency={selectedCurrency}
 						dropdown={dropdown}
 					/>
-					<div className='navbar-cart'>
+					<div id='navbar-cart' className='navbar-cart'>
 						<svg
+							onClick={handleClicksForDropDown}
+							id='navbar-cart'
 							xmlns='http://www.w3.org/2000/svg'
 							width='25'
 							height='25'
@@ -115,9 +123,13 @@ class Navigation extends PureComponent {
 							/>
 						</svg>
 						{cartLength > 0 ? (
-							<div className='cart-number'>{cartLength}</div>
+							<div
+								onClick={handleClicksForDropDown}
+								id='navbar-cart'
+								className='cart-number'>
+								{cartLength}
+							</div>
 						) : null}
-						{/* <div className='cart-overlay'></div> */}
 					</div>
 				</div>
 			</nav>
