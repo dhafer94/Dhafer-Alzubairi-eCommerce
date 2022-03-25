@@ -178,8 +178,8 @@ class App extends PureComponent {
 		const AddedProductId = e.target.id;
 		const chosenAttributes = this.state.chosenAttributes.filter((att) => att.id === AddedProductId);
 		const AddedProduct = products.find((product) => product.id === AddedProductId);
-		const { name, brand, prices, attributes, id } = AddedProduct;
-
+		const { name, brand, prices, attributes, id, gallery } = AddedProduct;
+		console.log(gallery);
 		//To only add the product to the cart when attributes has been chosen
 		//a popup to choose the correct one can be shown to the user otherwise, in the meantime an alert is implemented
 
@@ -192,6 +192,7 @@ class App extends PureComponent {
 						cart: [
 							...this.state.cart.filter((item) => item.id !== AddedProductId),
 							{
+
 								name: name,
 								brand: brand,
 								prices: prices,
@@ -200,6 +201,7 @@ class App extends PureComponent {
 									...this.state.cart.filter((item) => item.id === AddedProductId)[0].attributes, chosenAttributes
 								],
 								quantity: newItem[0].quantity + 1,
+								gallery: gallery
 							}
 						]
 					});
@@ -215,6 +217,8 @@ class App extends PureComponent {
 								id: id,
 								attributes: [this.state.chosenAttributes.filter(att => att.id === AddedProductId)],
 								quantity: 1,
+								gallery: gallery
+
 							}
 						]
 					});
@@ -230,8 +234,8 @@ class App extends PureComponent {
 							prices: prices,
 							id: id,
 							attributes: [this.state.chosenAttributes.filter(att => att.id === AddedProductId)],
-							quantity: 1
-
+							quantity: 1,
+							gallery: gallery
 						}]
 				});
 			}
@@ -298,10 +302,7 @@ class App extends PureComponent {
 									<CurrencyContext.Provider value={selectedCurrency}>
 										<CategoryProductsContext.Provider value={productsToBeShown}>
 											<Outlet />
-											{/* <CartOverlay cart={cart} /> */}
-											{/* <div className='cart-overlay'>
-
-											</div> */}
+											<CartOverlay currency={selectedCurrency} cart={cart} />
 										</CategoryProductsContext.Provider>
 									</CurrencyContext.Provider>
 								</AllDataContext.Provider>
