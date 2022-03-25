@@ -78,6 +78,7 @@
 
 		& .navbar-cart {
 			/* Inside auto layout */
+			// position: relative;
 			flex: none;
 			order: 3;
 			flex-grow: 0;
@@ -99,12 +100,6 @@
 				right: 5%;
 				top: -1%;
 				color: #ffffff;
-			}
-			& .cart-overlay {
-				position: absolute;
-			}
-			& .cart-overlay-invisible {
-				display: none;
 			}
 		}
 	}

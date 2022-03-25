@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import './App.scss';
 import Navigation from './components/Navigation/Navigation.Component';
+import CartOverlay from './components/CartOverlay/CartOverlay.Component';
 import { Outlet } from 'react-router-dom';
 import { gql } from '@apollo/client';
 import {
@@ -13,6 +14,8 @@ import {
 	HandleAttributeClickContext
 } from './contexts';
 import { withRouter } from './withRouter';
+import Currency from './components/Currency/Currency.Component';
+import { addTypenameToDocument } from '@apollo/client/utilities';
 
 class App extends PureComponent {
 	constructor(props) {
@@ -130,7 +133,7 @@ class App extends PureComponent {
 		const name = e.target.attributes.attribute.nodeValue;
 		const value = e.target.attributes.attributeval.nodeValue;
 		const id = e.target.id;
-		// console.log(id);
+
 		//to reset the previous active attribute/s and visually set the active attribute visually
 		if (e.target.className === 'product-attribute') {
 			e.target.parentNode.childNodes.forEach(
@@ -149,20 +152,22 @@ class App extends PureComponent {
 		this.setState({
 			chosenAttributes:
 				this.state.chosenAttributes.length === 0
-					? [
+					?
+					[
 						{
 							id: id,
 							name: name,
 							value: value,
-						},
+						}
 					]
-					: [
+					:
+					[
 						...this.state.chosenAttributes.filter((att) => att.name !== name),
 						{
 							id: id,
 							name: name,
 							value: value,
-						},
+						}
 					],
 		});
 	};
@@ -171,62 +176,77 @@ class App extends PureComponent {
 	handleAddToCart = (e) => {
 		const { products, cart } = this.state;
 		const AddedProductId = e.target.id;
-		const chosenAttributes = this.state.chosenAttributes.filter((item) => item.id === AddedProductId);
+		const chosenAttributes = this.state.chosenAttributes.filter((att) => att.id === AddedProductId);
 		const AddedProduct = products.find((product) => product.id === AddedProductId);
 		const { name, brand, prices, attributes, id } = AddedProduct;
-		// console.log('chosenAttributes');
 
 		//To only add the product to the cart when attributes has been chosen
 		//a popup to choose the correct one can be shown to the user otherwise, in the meantime an alert is implemented
+
 		if (chosenAttributes.length === attributes.length) {
 			if (cart.length > 0) {
 				if (cart.some((item) => item.id === AddedProductId)) {
-					cart.forEach((item) => {
-						if (item.id === AddedProductId) {
-							item.quantity += 1;
-						}
+					const newItem = cart.filter((item) => item.id === AddedProductId);
+
+					this.setState({
+						cart: [
+							...this.state.cart.filter((item) => item.id !== AddedProductId),
+							{
+								name: name,
+								brand: brand,
+								prices: prices,
+								id: id,
+								attributes: [
+									...this.state.cart.filter((item) => item.id === AddedProductId)[0].attributes, chosenAttributes
+								],
+								quantity: newItem[0].quantity + 1,
+							}
+						]
 					});
 				}
 				else {
 					this.setState({
-						cart: [...this.state.cart,
+						cart: [
+							...this.state.cart,
+							{
+								name: name,
+								brand: brand,
+								prices: prices,
+								id: id,
+								attributes: [this.state.chosenAttributes.filter(att => att.id === AddedProductId)],
+								quantity: 1,
+							}
+						]
+					});
+				}
+			}
+			else {
+				this.setState({
+					cart: [
+						...this.state.cart,
 						{
 							name: name,
 							brand: brand,
 							prices: prices,
 							id: id,
-							attributes: chosenAttributes,
+							attributes: [this.state.chosenAttributes.filter(att => att.id === AddedProductId)],
 							quantity: 1
 
-						}
-						]
-					});
-
-				}
-			} else {
-				this.setState({
-					cart: [...this.state.cart, {
-						name: name,
-						brand: brand,
-						prices: prices,
-						id: id,
-						attributes: chosenAttributes,
-						quantity: 1
-
-					}]
+						}]
 				});
 			}
 
 		} else {
-			const chosenAttributesNames = chosenAttributes.map((att) => att.name);
-			const notAddedAttributes = attributes.map((att) => att.name).filter((attr) => !chosenAttributesNames.includes(attr));
-
+			const chosenAttributesNames = chosenAttributes.map((att) => att.id === AddedProductId).map((att) => att.name);
+			const notAddedAttributes = attributes.map(att => att.name).filter((attr) => !chosenAttributesNames.includes(attr));
+			console.log(chosenAttributesNames, 'chosenAttributesNames');
 			if (notAddedAttributes.length === 1) {
-				const alert = notAddedAttributes.map((att) => att);
+				const alert = notAddedAttributes.map(att => att);
 				window.alert(`Please select one of the available options for your ${name}:\n${alert.map((att) => ` ${att}`)
 					} `);
-			} else {
-				const alert = notAddedAttributes.map((att) => att);
+			}
+			else {
+				const alert = notAddedAttributes.map(att => att);
 				window.alert(`Please select one of the available options for your ${name}:\n${alert.map((att) => ` ${att}`).slice(0, -1)} and ${alert[alert.length - 1]
 					} `);
 
@@ -251,12 +271,14 @@ class App extends PureComponent {
 	};
 
 	render() {
-		const { productsToBeShown, currency, dataFetched, allData, dropdown, cart } = this.state;
+		const { productsToBeShown, currency, dataFetched, allData, dropdown, cart, chosenAttributes } = this.state;
 		const chosenCategory = this.props.router.params.plp;
 		const selectedCurrency = this.state.currency.filter(
 			(item) => item.selected === true,
 		);
-		console.log(cart);
+		console.log(cart, 'cart');
+		// console.log(chosenAttributes, 'chosenAttributes');
+
 		return (
 			<div onClick={(e) => this.handleClicksForDropDown(e)} className='App' >
 				<Navigation
@@ -266,7 +288,7 @@ class App extends PureComponent {
 					dataFetched={dataFetched}
 					selectedCurrency={selectedCurrency}
 					dropdown={dropdown}
-					cart={cart}
+					cartLength={cart.length}
 				/>
 				<HandleAttributeClickContext.Provider value={this.handleAttributeClick}>
 					<HandleAddToCartContext.Provider value={this.handleAddToCart}>
@@ -276,6 +298,10 @@ class App extends PureComponent {
 									<CurrencyContext.Provider value={selectedCurrency}>
 										<CategoryProductsContext.Provider value={productsToBeShown}>
 											<Outlet />
+											{/* <CartOverlay cart={cart} /> */}
+											{/* <div className='cart-overlay'>
+
+											</div> */}
 										</CategoryProductsContext.Provider>
 									</CurrencyContext.Provider>
 								</AllDataContext.Provider>
