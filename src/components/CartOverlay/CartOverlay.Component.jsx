@@ -4,6 +4,40 @@ import './CartOverlay.styles.scss';
 class CartOverlay extends PureComponent {
 	constructor(props) {
 		super(props);
+		this.state = {
+			totalPrice: 0,
+		};
+	}
+
+	componentDidUpdate() {
+		const { cart, currency } = this.props;
+		if (cart.length > 0) {
+			const prices = cart
+				.map((item) =>
+					item.prices.map((price) => ({
+						quantity: item.quantity,
+						price: price.amount,
+						currency: price.currency.label,
+						symbol: price.currency.symbol,
+					})),
+				)
+				.flat(1)
+				.map((item) => ({
+					currency: item.currency,
+					price: item.quantity * item.price,
+					symbol: item.symbol,
+				}));
+
+			const sum = prices
+				.filter((price) => price.currency === currency[0].label)
+				.map((price) => price.price)
+				.reduce((prevVal, val) => prevVal + val)
+				.toFixed(2);
+
+			this.setState({
+				totalPrice: sum,
+			});
+		}
 	}
 
 	render() {
@@ -14,7 +48,8 @@ class CartOverlay extends PureComponent {
 			dropdown,
 			handleClicksForDropDown,
 		} = this.props;
-		// console.log(dropdown);
+		const { totalPrice } = this.state;
+		// console.log(totalPrice);
 
 		return (
 			<div
@@ -71,14 +106,47 @@ class CartOverlay extends PureComponent {
 												<div
 													id='cart-overlay'
 													className='cart-overlay-item-attributes-container'>
-													<div className='cart-overlay-item-attribute-box'>
-														s
-													</div>
-													<div
+													{/* {console.log(item)} */}
+													{item.allAttributes.length > 0
+														? item.allAttributes.map((att, i) =>
+																// console.log(att),
+																item.allAttributes.type === 'swatch' ? (
+																	<div
+																		key={i}
+																		style={{ background: `${att.value}` }}
+																		id='cart-overlay'
+																		className='cart-overlay-item-attribute-box'></div>
+																) : (
+																	<div
+																		key={i}
+																		id='cart-overlay'
+																		className='cart-overlay-item-attribute-box'>
+																		{att.value}
+																	</div>
+																),
+														  )
+														: null}
+													{/* {item.attributes.flat(1).map((att, i) =>
+														att.type === 'swatch' ? (
+															<div
+																key={i}
+																style={{ background: `${att.value}` }}
+																id='cart-overlay'
+																className='cart-overlay-item-attribute-box'></div>
+														) : (
+															<div
+																key={i}
+																id='cart-overlay'
+																className='cart-overlay-item-attribute-box'>
+																{att.value}
+															</div>
+														),
+													)} */}
+													{/* <div
 														id='cart-overlay'
 														className='cart-overlay-item-attribute-box'>
 														s
-													</div>
+													</div> */}
 												</div>
 											</div>
 											<div
@@ -120,12 +188,13 @@ class CartOverlay extends PureComponent {
 				</div>
 
 				<div id='cart-overlay' className='cart-overlay-total-price-container'>
-					<div id='cart-overlay' className='cart-overlay-total-price-text'>
+					<p id='cart-overlay' className='cart-overlay-total-price-text'>
 						total
-					</div>
-					<div id='cart-overlay' className='cart-overlay-total-price-amount'>
-						$1329
-					</div>
+					</p>
+					<p id='cart-overlay' className='cart-overlay-total-price-amount'>
+						{currency[0] && currency[0].symbol}
+						{totalPrice}
+					</p>
 				</div>
 				<div id='cart-overlay' className='cart-overlay-total-price-container'>
 					<button id='cart-overlay' className='cart-overlay-view-btn'>

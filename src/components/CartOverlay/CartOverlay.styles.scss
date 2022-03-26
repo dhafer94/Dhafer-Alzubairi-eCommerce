@@ -71,7 +71,7 @@
 						font-size: 15px;
 						line-height: 160%;
 
-						width: 24px;
+						min-width: 24px;
 						height: 24px;
 
 						display: flex;
@@ -128,10 +128,29 @@
 		justify-content: space-between;
 
 		& .cart-overlay-total-price-text {
+			font-family: 'Roboto';
+			font-style: normal;
+			font-weight: 500;
+			font-size: 16px;
+			line-height: 18px;
 			margin: 10px 15px 40px;
 		}
 		& .cart-overlay-total-price-amount {
 			margin: 10px 15px 40px;
+			/* $100.00 */
+
+			width: 95px;
+			height: 26px;
+			// padding: 0;
+			font-family: 'Raleway';
+			font-style: normal;
+			font-weight: 700;
+			font-size: 16px;
+			line-height: 160%;
+			text-align: right;
+			/* identical to box height, or 26px */
+
+			color: #1d1f22;
 		}
 		& .cart-overlay-view-btn {
 			display: flex;
