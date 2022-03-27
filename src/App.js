@@ -186,13 +186,17 @@ class App extends PureComponent {
 		const AddedProduct = products.find((product) => product.id === AddedProductId);
 		const { name, brand, prices, attributes, id, gallery } = AddedProduct;
 
-		const allAttributes = attributes.map(att => ({
-			id: AddedProductId,
-			name: att.name,
-			type: att.type,
-			attributes: att.items.map(attr => attr).flat(1)
-		}));
-
+		const allAttributes = attributes.map(att => (
+			att.items.map(attr => (
+				{
+					value: attr.value, id: AddedProductId,
+					name: att.name,
+					type: att.type,
+					selected: chosenAttributes.some(i => i.name === att.name && i.value === attr.value)
+				}))
+		)).flat(1);
+		// console.log(chosenAttributes, 'chosenAttributes');
+		// console.log(chosenAttributes.map(item => console.log(item.name && item.value, 'item.name')));
 		//To only add the product to the cart when attributes has been chosen
 		//a popup to choose the correct one can be shown to the user otherwise, in the meantime an alert is implemented
 		if (chosenAttributes.length === attributes.length) {
@@ -228,7 +232,7 @@ class App extends PureComponent {
 								brand: brand,
 								prices: prices,
 								id: id,
-								attributes: [this.state.chosenAttributes.filter(att => att.id === AddedProductId)],
+								attributes: [chosenAttributes],
 								quantity: 1,
 								gallery: gallery,
 								allAttributes: allAttributes
@@ -246,7 +250,7 @@ class App extends PureComponent {
 							brand: brand,
 							prices: prices,
 							id: id,
-							attributes: [this.state.chosenAttributes.filter(att => att.id === AddedProductId)],
+							attributes: [chosenAttributes],
 							quantity: 1,
 							gallery: gallery,
 							allAttributes: allAttributes
@@ -324,6 +328,7 @@ class App extends PureComponent {
 		const matchingItemIndex = this.state.cart.findIndex(item =>
 			item.id === id
 		);
+		console.log(id);
 
 		const incremented = {
 			name: item.name,
@@ -344,6 +349,7 @@ class App extends PureComponent {
 
 		const newCart = cart.filter(item =>
 			item.id !== id
+
 		);
 		if (name === 'increment') {
 			newCart.splice(matchingItemIndex, 0, incremented);
@@ -376,6 +382,8 @@ class App extends PureComponent {
 		const cartId = 'navbar-cart';
 		const currencyId = 'navbar-currency';
 
+		// console.log(e.target.id);
+
 		//exceptions are
 		if (id !== cartId && name !== 'increment' && name !== 'decrement' && id !== currencyId && id !== currencyId && id !== 'cart-overlay') {
 			this.setState({
@@ -394,7 +402,7 @@ class App extends PureComponent {
 		const selectedCurrency = this.state.currency.filter(
 			(item) => item.selected === true,
 		);
-		// console.log(cart, 'cart');
+		// console.log(chosenAttributes, 'chosenAttributes');
 
 		return (
 			<div

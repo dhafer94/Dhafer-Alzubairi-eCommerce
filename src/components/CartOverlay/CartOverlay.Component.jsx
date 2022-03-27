@@ -1,11 +1,14 @@
 import React, { PureComponent } from 'react';
 import './CartOverlay.styles.scss';
+import CartItemComponent from '../CartItem/CartItem.Component';
+import ErrorBoundary from '../ErrorBoundary';
 
 class CartOverlay extends PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
 			totalPrice: 0,
+			allAttributes: [],
 		};
 	}
 
@@ -33,9 +36,12 @@ class CartOverlay extends PureComponent {
 				.map((price) => price.price)
 				.reduce((prevVal, val) => prevVal + val)
 				.toFixed(2);
-
 			this.setState({
 				totalPrice: sum,
+			});
+		} else {
+			this.setState({
+				totalPrice: 0,
 			});
 		}
 	}
@@ -49,7 +55,9 @@ class CartOverlay extends PureComponent {
 			handleClicksForDropDown,
 		} = this.props;
 		const { totalPrice } = this.state;
-		// console.log(totalPrice);
+		const allAttributes = cart.map((item) => item.allAttributes).flat(1);
+
+		// console.log(allAttributes, 'allAttributes');
 
 		return (
 			<div
@@ -103,56 +111,19 @@ class CartOverlay extends PureComponent {
 																),
 													  )
 													: null}
-												<div
-													id='cart-overlay'
-													className='cart-overlay-item-attributes-container'>
-													{/* {console.log(item)} */}
-													{item.allAttributes.length > 0
-														? item.allAttributes.map((att, i) =>
-																// console.log(att),
-																item.allAttributes.type === 'swatch' ? (
-																	<div
-																		key={i}
-																		style={{ background: `${att.value}` }}
-																		id='cart-overlay'
-																		className='cart-overlay-item-attribute-box'></div>
-																) : (
-																	<div
-																		key={i}
-																		id='cart-overlay'
-																		className='cart-overlay-item-attribute-box'>
-																		{att.value}
-																	</div>
-																),
-														  )
-														: null}
-													{/* {item.attributes.flat(1).map((att, i) =>
-														att.type === 'swatch' ? (
-															<div
-																key={i}
-																style={{ background: `${att.value}` }}
-																id='cart-overlay'
-																className='cart-overlay-item-attribute-box'></div>
-														) : (
-															<div
-																key={i}
-																id='cart-overlay'
-																className='cart-overlay-item-attribute-box'>
-																{att.value}
-															</div>
-														),
-													)} */}
-													{/* <div
-														id='cart-overlay'
-														className='cart-overlay-item-attribute-box'>
-														s
-													</div> */}
-												</div>
+												<CartItemComponent
+													item={item}
+													allAttributes={allAttributes}
+												/>
 											</div>
 											<div
+												key={i}
 												id='cart-overlay'
 												className='cart-overlay-item-right-container'>
-												<div className='cart-overlay-item-mid-container'>
+												<div
+													id='cart-overlay'
+													key={i}
+													className='cart-overlay-item-mid-container'>
 													<button
 														id={item.id}
 														name='increment'
