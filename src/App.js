@@ -14,7 +14,7 @@ import {
 	HandleAttributeClickContext
 } from './contexts';
 import { withRouter } from './withRouter';
-import { type } from '@testing-library/user-event/dist/type';
+import { isEqual } from './isEqual';
 
 class App extends PureComponent {
 	constructor(props) {
@@ -202,26 +202,73 @@ class App extends PureComponent {
 		if (chosenAttributes.length === attributes.length) {
 			if (cart.length > 0) {
 				if (cart.some((item) => item.id === AddedProductId)) {
-					const newItem = cart.filter((item) => item.id === AddedProductId);
+					const matchingItems = cart.filter((item) => item.id === AddedProductId);
+					matchingItems.map(item => {
+						if (isEqual(chosenAttributes, item.attributes)) {
+							this.setState({
+								cart: [
+									...cart.filter(item => item.id !== AddedProductId),
+									...cart.filter(item => item.id === AddedProductId && !isEqual(chosenAttributes, item.attributes)),
+									{
+										name: item.name,
+										brand: item.brand,
+										prices: item.prices,
+										id: item.id,
+										attributes: item.attributes,
+										quantity: item.quantity + 1,
+										gallery: item.gallery,
+										allAttributes: item.allAttributes,
+									}
 
-					this.setState({
-						cart: [
-							...this.state.cart.filter((item) => item.id !== AddedProductId),
-							{
+								]
 
-								name: name,
-								brand: brand,
-								prices: prices,
-								id: id,
-								attributes: [
-									...this.state.cart.filter((item) => item.id === AddedProductId)[0].attributes, chosenAttributes
-								],
-								quantity: newItem[0].quantity + 1,
-								gallery: gallery,
-								allAttributes: allAttributes,
-							}
-						]
+							});
+						} else {
+							this.setState({
+								cart: [
+									...cart.filter(item => item.id !== AddedProductId),
+									...cart.filter(item => item.id === AddedProductId && isEqual(chosenAttributes, item.attributes)),
+									...cart.filter(item => item.id === AddedProductId && !isEqual(chosenAttributes, item.attributes)),
+
+									{
+										name: item.name,
+										brand: item.brand,
+										prices: item.prices,
+										id: item.id,
+										attributes: chosenAttributes,
+										quantity: item.quantity,
+										gallery: item.gallery,
+										allAttributes: item.allAttributes,
+									}
+
+								]
+
+							});
+
+						}
+
 					});
+
+
+
+					// this.setState({
+					// 	cart: [
+					// 		...this.state.cart.filter((item) => item.id !== AddedProductId),
+					// {
+
+					// 	name: name,
+					// 	brand: brand,
+					// 	prices: prices,
+					// 	id: id,
+					// 	attributes: [
+					// 		...this.state.cart.filter((item) => item.id === AddedProductId)[0].attributes, chosenAttributes
+					// 	],
+					// 	quantity: newItem[0].quantity + 1,
+					// 	gallery: gallery,
+					// 	allAttributes: allAttributes,
+					// }
+					// 	]
+					// });
 				}
 				else {
 					this.setState({
@@ -232,7 +279,7 @@ class App extends PureComponent {
 								brand: brand,
 								prices: prices,
 								id: id,
-								attributes: [chosenAttributes],
+								attributes: chosenAttributes,
 								quantity: 1,
 								gallery: gallery,
 								allAttributes: allAttributes
@@ -250,7 +297,7 @@ class App extends PureComponent {
 							brand: brand,
 							prices: prices,
 							id: id,
-							attributes: [chosenAttributes],
+							attributes: chosenAttributes,
 							quantity: 1,
 							gallery: gallery,
 							allAttributes: allAttributes
@@ -402,7 +449,7 @@ class App extends PureComponent {
 		const selectedCurrency = this.state.currency.filter(
 			(item) => item.selected === true,
 		);
-		// console.log(chosenAttributes, 'chosenAttributes');
+		console.log(cart, 'cart');
 
 		return (
 			<div
