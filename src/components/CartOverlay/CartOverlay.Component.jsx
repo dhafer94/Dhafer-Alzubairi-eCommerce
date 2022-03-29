@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import './CartOverlay.styles.scss';
 import CartItemComponent from '../CartItem/CartItem.Component';
-import ErrorBoundary from '../ErrorBoundary';
+import { NavLink } from 'react-router-dom';
 
 class CartOverlay extends PureComponent {
 	constructor(props) {
@@ -15,27 +15,19 @@ class CartOverlay extends PureComponent {
 	componentDidUpdate() {
 		const { cart, currency } = this.props;
 		if (cart.length > 0) {
-			const prices = cart
-				.map((item) =>
-					item.prices.map((price) => ({
-						quantity: item.quantity,
-						price: price.amount,
-						currency: price.currency.label,
-						symbol: price.currency.symbol,
-					})),
+			const priceArray = cart
+				.map(
+					(item) =>
+						item.prices.filter(
+							(price) => price.currency.label === currency[0].label,
+						)[0].amount * item.quantity,
 				)
-				.flat(1)
-				.map((item) => ({
-					currency: item.currency,
-					price: item.quantity * item.price,
-					symbol: item.symbol,
-				}));
+				.flat(1);
 
-			const sum = prices
-				.filter((price) => price.currency === currency[0].label)
-				.map((price) => price.price)
-				.reduce((prevVal, val) => prevVal + val)
+			const sum = priceArray
+				.reduce((prevItem, item) => prevItem + item)
 				.toFixed(2);
+
 			this.setState({
 				totalPrice: sum,
 			});
@@ -55,7 +47,7 @@ class CartOverlay extends PureComponent {
 			handleClicksForDropDown,
 		} = this.props;
 		const { totalPrice } = this.state;
-		const allAttributes = cart.map((item) => item.allAttributes).flat(1);
+		// const allAttributes = cart.map((item) => item.allAttributes).flat(1);
 
 		// console.log(allAttributes, 'allAttributes');
 
@@ -113,7 +105,7 @@ class CartOverlay extends PureComponent {
 													: null}
 												<CartItemComponent
 													item={item}
-													allAttributes={allAttributes}
+													allAttributes={item.allAttributes}
 												/>
 											</div>
 											<div
@@ -127,7 +119,7 @@ class CartOverlay extends PureComponent {
 													<button
 														id={item.id}
 														name='increment'
-														onClick={(e) => handleIncrementDecrement(e, item)}
+														onClick={(e) => handleIncrementDecrement(e, i)}
 														className='cart-overlay-item-attribute-increment-decrement'>
 														+
 													</button>
@@ -140,7 +132,7 @@ class CartOverlay extends PureComponent {
 													<button
 														id={item.id}
 														name='decrement'
-														onClick={(e) => handleIncrementDecrement(e, item)}
+														onClick={(e) => handleIncrementDecrement(e, i)}
 														className='cart-overlay-item-attribute-increment-decrement'>
 														-
 													</button>
@@ -168,12 +160,10 @@ class CartOverlay extends PureComponent {
 					</p>
 				</div>
 				<div id='cart-overlay' className='cart-overlay-total-price-container'>
-					<button id='cart-overlay' className='cart-overlay-view-btn'>
+					<NavLink className='cart-overlay-view-btn' to={`/cart`}>
 						view bag
-					</button>
-					<button id='cart-overlay' className='cart-overlay-checkout-btn'>
-						checkout
-					</button>
+					</NavLink>
+					<button className='cart-overlay-checkout-btn'>checkout</button>
 				</div>
 			</div>
 		);

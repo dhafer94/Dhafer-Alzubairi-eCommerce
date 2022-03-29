@@ -12,17 +12,17 @@ class CartItem extends PureComponent {
 	}
 
 	componentDidMount() {
-		const { allAttributes, item } = this.props;
+		const { item } = this.props;
 		this.setState({
-			allAttributes: allAttributes,
+			allAttributes: item.allAttributes,
 			item: item,
 		});
 	}
 
 	componentDidUpdate() {
-		const { allAttributes, item } = this.props;
+		const { item } = this.props;
 		this.setState({
-			allAttributes: allAttributes,
+			allAttributes: item.allAttributes,
 			item: item,
 		});
 	}
@@ -30,53 +30,66 @@ class CartItem extends PureComponent {
 	render() {
 		const { allAttributes, item } = this.state;
 
+		// console.log(allAttributes);
+
 		return (
 			<div
 				id='cart-overlay'
 				className='cart-overlay-item-attributes-main-container'>
 				<div
 					id='cart-overlay'
-					// key={i + 5000}
-					className='cart-overlay-item-attributes-other-container'>
-					{allAttributes.map((att, i) =>
-						att.id === item.id ? (
-							att.type === 'text' ? (
-								<div
-									key={i + 4000}
-									id='cart-overlay'
-									className={
-										att.selected
-											? 'cart-overlay-item-attribute-box-selected'
-											: 'cart-overlay-item-attribute-box'
-									}>
-									{att.value}
-								</div>
-							) : null
-						) : null,
-					)}
+					className='cart-overlay-item-attributes-group-container'>
+					{allAttributes.map((att, i) => (
+						<div
+							key={i}
+							id='cart-overlay'
+							className='cart-overlay-item-attributes-other-container'>
+							{att.map((attr, i) =>
+								attr.id === item.id ? (
+									attr.type === 'text' ? (
+										<div
+											key={i}
+											id='cart-overlay'
+											className={
+												attr.selected
+													? 'cart-overlay-item-attribute-box-selected'
+													: 'cart-overlay-item-attribute-box'
+											}>
+											{attr.value}
+										</div>
+									) : null
+								) : null,
+							)}
+						</div>
+					))}
 				</div>
 				<div
 					id='cart-overlay'
-					// key={i}
-					className='cart-overlay-item-attributes-swatch-container'>
-					{allAttributes.map((att, i) =>
-						att.id === item.id ? (
-							att.type === 'swatch' ? (
-								<div
-									key={i + 2000}
-									style={{
-										background: `${att.value}`,
-									}}
-									id='cart-overlay'
-									className={
-										att.selected
-											? 'cart-overlay-item-attribute-swatch-selected'
-											: 'cart-overlay-item-attribute-swatch'
-									}
-								/>
-							) : null
-						) : null,
-					)}
+					className='cart-overlay-item-attributes-group-container'>
+					{allAttributes.map((att, i) => (
+						<div
+							key={i}
+							id='cart-overlay'
+							className='cart-overlay-item-attributes-swatch-container'>
+							{att.map((attr, i) =>
+								attr.id === item.id ? (
+									attr.type === 'swatch' ? (
+										<div
+											key={i}
+											id='cart-overlay'
+											className={
+												attr.selected
+													? 'cart-overlay-item-attribute-swatch-selected'
+													: 'cart-overlay-item-attribute-swatch'
+											}
+											style={{
+												background: `${attr.value}`,
+											}}></div>
+									) : null
+								) : null,
+							)}
+						</div>
+					))}
 				</div>
 			</div>
 		);

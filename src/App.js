@@ -11,7 +11,9 @@ import {
 	DataFetchedContext,
 	ChosenCategoryContext,
 	HandleAddToCartContext,
-	HandleAttributeClickContext
+	HandleAttributeClickContext,
+	CartContext,
+	DropdownContext
 } from './contexts';
 import { withRouter } from './withRouter';
 import { isEqual } from './isEqual';
@@ -186,6 +188,7 @@ class App extends PureComponent {
 		const AddedProduct = products.find((product) => product.id === AddedProductId);
 		const { name, brand, prices, attributes, id, gallery } = AddedProduct;
 
+
 		const allAttributes = attributes.map(att => (
 			att.items.map(attr => (
 				{
@@ -194,8 +197,10 @@ class App extends PureComponent {
 					type: att.type,
 					selected: chosenAttributes.some(i => i.name === att.name && i.value === attr.value)
 				}))
-		)).flat(1);
-		// console.log(chosenAttributes, 'chosenAttributes');
+		));
+
+
+		// console.log(allAttributes, 'allAttributes');
 		// console.log(chosenAttributes.map(item => console.log(item.name && item.value, 'item.name')));
 		//To only add the product to the cart when attributes has been chosen
 		//a popup to choose the correct one can be shown to the user otherwise, in the meantime an alert is implemented
@@ -203,6 +208,9 @@ class App extends PureComponent {
 			if (cart.length > 0) {
 				if (cart.some((item) => item.id === AddedProductId)) {
 					const matchingItems = cart.filter((item) => item.id === AddedProductId);
+					// const newAttributes = cart.map()
+
+
 					matchingItems.map(item => {
 						if (isEqual(chosenAttributes, item.attributes)) {
 							this.setState({
@@ -236,9 +244,9 @@ class App extends PureComponent {
 										prices: item.prices,
 										id: item.id,
 										attributes: chosenAttributes,
-										quantity: item.quantity,
+										quantity: 1,
 										gallery: item.gallery,
-										allAttributes: item.allAttributes,
+										allAttributes: allAttributes,
 									}
 
 								]
@@ -248,27 +256,6 @@ class App extends PureComponent {
 						}
 
 					});
-
-
-
-					// this.setState({
-					// 	cart: [
-					// 		...this.state.cart.filter((item) => item.id !== AddedProductId),
-					// {
-
-					// 	name: name,
-					// 	brand: brand,
-					// 	prices: prices,
-					// 	id: id,
-					// 	attributes: [
-					// 		...this.state.cart.filter((item) => item.id === AddedProductId)[0].attributes, chosenAttributes
-					// 	],
-					// 	quantity: newItem[0].quantity + 1,
-					// 	gallery: gallery,
-					// 	allAttributes: allAttributes,
-					// }
-					// 	]
-					// });
 				}
 				else {
 					this.setState({
@@ -367,57 +354,56 @@ class App extends PureComponent {
 
 	};
 
-	handleIncrementDecrement = (e, item) => {
+	handleIncrementDecrement = (e, i) => {
 		const id = e.target.id;
 		const name = e.target.name;
 		const cart = this.state.cart;
 
-		const matchingItemIndex = this.state.cart.findIndex(item =>
-			item.id === id
-		);
-		console.log(id);
+		if (i !== 'undefined') {
+			const item = cart[i];
 
-		const incremented = {
-			name: item.name,
-			brand: item.brand,
-			prices: item.prices,
-			id: item.id,
-			quantity: item.quantity + 1,
-			gallery: item.gallery
-		};
-		const decremented = {
-			name: item.name,
-			brand: item.brand,
-			prices: item.prices,
-			id: item.id,
-			quantity: item.quantity - 1,
-			gallery: item.gallery
-		};
+			const incremented = {
+				name: item.name,
+				brand: item.brand,
+				prices: item.prices,
+				attributes: item.attributes,
+				id: item.id,
+				quantity: item.quantity + 1,
+				gallery: item.gallery,
+				allAttributes: item.allAttributes
+			};
+			const decremented = {
+				name: item.name,
+				brand: item.brand,
+				prices: item.prices,
+				attributes: item.attributes,
+				id: item.id,
+				quantity: item.quantity - 1,
+				gallery: item.gallery,
+				allAttributes: item.allAttributes
+			};
 
-		const newCart = cart.filter(item =>
-			item.id !== id
+			const newCart = [...cart];
 
-		);
-		if (name === 'increment') {
-			newCart.splice(matchingItemIndex, 0, incremented);
-			this.setState({
-				cart: newCart
-			});
-		}
-		if (name === 'decrement') {
-			if (decremented.quantity <= 0) {
-				if (decremented.id === id) {
-					const cartWithNonZero = newCart.filter(item => item.quantity !== 0);
-					this.setState({
-						cart: cartWithNonZero
-					});
-				}
-			} else {
-				newCart.splice(matchingItemIndex, 0, decremented);
+			if (name === 'increment') {
+				newCart.splice(i, 1, incremented);
 				this.setState({
 					cart: newCart
 				});
-
+			}
+			if (name === 'decrement') {
+				//remove the item if the quantity hits zero
+				if (decremented.quantity <= 0) {
+					newCart.splice(i, 1);
+					this.setState({
+						cart: newCart
+					});;
+				} else {
+					newCart.splice(i, 1, decremented);
+					this.setState({
+						cart: newCart
+					});
+				}
 			}
 		}
 	};
@@ -428,11 +414,11 @@ class App extends PureComponent {
 		const name = e.target.name;
 		const cartId = 'navbar-cart';
 		const currencyId = 'navbar-currency';
-
-		// console.log(e.target.id);
+		//Added cart-overlay id to all it's elements
+		const cartOverlayId = 'cart-overlay';
 
 		//exceptions are
-		if (id !== cartId && name !== 'increment' && name !== 'decrement' && id !== currencyId && id !== currencyId && id !== 'cart-overlay') {
+		if (id !== cartId && name !== 'increment' && name !== 'decrement' && id !== currencyId && id !== currencyId && id !== cartOverlayId) {
 			this.setState({
 				dropdown: {
 					currency: 'inactive',
@@ -449,12 +435,12 @@ class App extends PureComponent {
 		const selectedCurrency = this.state.currency.filter(
 			(item) => item.selected === true,
 		);
-		console.log(cart, 'cart');
+		// console.log(cart, 'cart');
 
 		return (
 			<div
 				onClick={this.resetter}
-				className='App' >
+				className='App'				>
 				<Navigation
 					categoriesNames={this.state.categoriesNames}
 					currency={currency}
@@ -463,32 +449,34 @@ class App extends PureComponent {
 					selectedCurrency={selectedCurrency}
 					dropdown={dropdown.currency}
 					cartLength={cart.length}
-					handleIncrementDecrement={this.handleIncrementDecrement}
 					handleClicksForDropDown={this.handleClicksForDropDown}
 					cart={cart}
 				/>
-				<HandleAttributeClickContext.Provider value={this.handleAttributeClick}>
-					<HandleAddToCartContext.Provider value={this.handleAddToCart}>
-						<ChosenCategoryContext.Provider value={chosenCategory}>
-							<DataFetchedContext.Provider value={dataFetched}>
-								<AllDataContext.Provider value={allData}>
-									<CurrencyContext.Provider value={selectedCurrency}>
-										<CategoryProductsContext.Provider value={productsToBeShown}>
-											<Outlet />
-											<CartOverlay
-												// id='cart-overlay'
-												dropdown={dropdown.cartOverlay}
-												handleIncrementDecrement={this.handleIncrementDecrement}
-												currency={selectedCurrency}
-												cart={cart} />
-										</CategoryProductsContext.Provider>
-									</CurrencyContext.Provider>
-								</AllDataContext.Provider>
-							</DataFetchedContext.Provider>
-						</ChosenCategoryContext.Provider>
-					</HandleAddToCartContext.Provider>
-				</HandleAttributeClickContext.Provider>
-			</div>
+				<CartContext.Provider value={cart}>
+					<HandleAttributeClickContext.Provider value={this.handleAttributeClick}>
+						<HandleAddToCartContext.Provider value={this.handleAddToCart}>
+							<ChosenCategoryContext.Provider value={chosenCategory}>
+								<DataFetchedContext.Provider value={dataFetched}>
+									<AllDataContext.Provider value={allData}>
+										<CurrencyContext.Provider value={selectedCurrency}>
+											<CategoryProductsContext.Provider value={productsToBeShown}>
+												<div className={dropdown.cartOverlay === 'active' ? 'opacity' : 'normal'}>
+													<Outlet />
+												</div>
+												<CartOverlay
+													dropdown={dropdown.cartOverlay}
+													handleIncrementDecrement={this.handleIncrementDecrement}
+													currency={selectedCurrency}
+													cart={cart} />
+											</CategoryProductsContext.Provider>
+										</CurrencyContext.Provider>
+									</AllDataContext.Provider>
+								</DataFetchedContext.Provider>
+							</ChosenCategoryContext.Provider>
+						</HandleAddToCartContext.Provider>
+					</HandleAttributeClickContext.Provider>
+				</CartContext.Provider>
+			</div >
 		);
 	}
 }

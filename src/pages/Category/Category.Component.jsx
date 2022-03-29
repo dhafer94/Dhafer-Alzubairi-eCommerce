@@ -15,9 +15,8 @@ class Category extends PureComponent {
 	}
 
 	render() {
-		// console.log(this.props);
 		return (
-			<div className='category-page'>
+			<div className={'category-page'}>
 				<ChosenCategoryContext.Consumer>
 					{(category) => (
 						<DataFetchedContext.Consumer>

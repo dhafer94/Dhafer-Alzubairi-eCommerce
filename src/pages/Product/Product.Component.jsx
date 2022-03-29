@@ -17,7 +17,7 @@ class Product extends PureComponent {
 
 	render() {
 		return (
-			<div className='product-profile'>
+			<div className={'product-profile'}>
 				<HandleAttributeClickContext.Consumer>
 					{(handleAttributeClick) => (
 						<HandleAddToCartContext.Consumer>

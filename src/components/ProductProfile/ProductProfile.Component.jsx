@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import './ProductProfile.styles.scss';
 import { withRouter } from '../../withRouter';
+import { DropdownContext } from '../../contexts';
 
 class ProductProfile extends PureComponent {
 	constructor(props) {
@@ -13,6 +14,7 @@ class ProductProfile extends PureComponent {
 			primaryImg: '',
 		};
 	}
+
 	componentDidMount() {
 		this.setState({
 			allData: this.props.allData,
