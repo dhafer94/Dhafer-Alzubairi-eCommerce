@@ -13,7 +13,7 @@ import {
 	HandleAddToCartContext,
 	HandleAttributeClickContext,
 	CartContext,
-	DropdownContext
+	HandleIncrementDecrementContext,
 } from './contexts';
 import { withRouter } from './withRouter';
 import { isEqual } from './isEqual';
@@ -704,30 +704,32 @@ class App extends PureComponent {
 					handleClicksForDropDown={this.handleClicksForDropDown}
 					cart={cart}
 				/>
-				<CartContext.Provider value={cart}>
-					<HandleAttributeClickContext.Provider value={this.handleAttributeClick}>
-						<HandleAddToCartContext.Provider value={this.handleAddToCart}>
-							<ChosenCategoryContext.Provider value={chosenCategory}>
-								<DataFetchedContext.Provider value={dataFetched}>
-									<AllDataContext.Provider value={allData}>
-										<CurrencyContext.Provider value={selectedCurrency}>
-											<CategoryProductsContext.Provider value={productsToBeShown}>
-												<div className={dropdown.cartOverlay === 'active' ? 'opacity' : 'normal'}>
-													<Outlet />
-												</div>
-												<CartOverlay
-													dropdown={dropdown.cartOverlay}
-													handleIncrementDecrement={this.handleIncrementDecrement}
-													currency={selectedCurrency}
-													cart={cart} />
-											</CategoryProductsContext.Provider>
-										</CurrencyContext.Provider>
-									</AllDataContext.Provider>
-								</DataFetchedContext.Provider>
-							</ChosenCategoryContext.Provider>
-						</HandleAddToCartContext.Provider>
-					</HandleAttributeClickContext.Provider>
-				</CartContext.Provider>
+				<HandleIncrementDecrementContext.Provider value={this.handleIncrementDecrement}>
+					<CartContext.Provider value={cart}>
+						<HandleAttributeClickContext.Provider value={this.handleAttributeClick}>
+							<HandleAddToCartContext.Provider value={this.handleAddToCart}>
+								<ChosenCategoryContext.Provider value={chosenCategory}>
+									<DataFetchedContext.Provider value={dataFetched}>
+										<AllDataContext.Provider value={allData}>
+											<CurrencyContext.Provider value={selectedCurrency}>
+												<CategoryProductsContext.Provider value={productsToBeShown}>
+													<div className={dropdown.cartOverlay === 'active' ? 'opacity' : 'normal'}>
+														<Outlet />
+													</div>
+													<CartOverlay
+														dropdown={dropdown.cartOverlay}
+														handleIncrementDecrement={this.handleIncrementDecrement}
+														currency={selectedCurrency}
+														cart={cart} />
+												</CategoryProductsContext.Provider>
+											</CurrencyContext.Provider>
+										</AllDataContext.Provider>
+									</DataFetchedContext.Provider>
+								</ChosenCategoryContext.Provider>
+							</HandleAddToCartContext.Provider>
+						</HandleAttributeClickContext.Provider>
+					</CartContext.Provider>
+				</HandleIncrementDecrementContext.Provider>
 			</div >
 		);
 	}

@@ -16,6 +16,10 @@ export const HandleAttributeClickContext = React.createContext();
 
 export const CartContext = React.createContext();
 
+export const HandleIncrementDecrementContext = React.createContext();
+
+
+
 
 
 

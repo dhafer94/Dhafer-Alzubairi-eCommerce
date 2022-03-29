@@ -1,41 +1,20 @@
 .cart {
-	margin: 25px 14vw 60px 8vw;
+	margin: 0 14vw 0 8vw;
+	color: #1d1f22;
 
-	& .cart-title {
-	}
+	.cart-title {
+		margin-bottom: 60px;
+		font-family: 'Raleway';
+		font-style: normal;
+		font-weight: 700;
+		font-size: 32px;
+		line-height: 40px;
+		/* identical to box height, or 125% */
 
-	& .cart-products-container {
-		&.cart-product-card {
-			& .cart-product-card-brand {
-			}
-
-			& .cart-product-card-name {
-			}
-
-			& .cart-product-card-price {
-			}
-
-			& .cart-product-card-attributes-main-container {
-				& .cart-product-card-attributes-text-container {
-					& .cart-product-card-attribute-box {
-					}
-
-					& .cart-product-card-attribute-box-selected {
-					}
-				}
-
-				& .cart-product-card-attributes-swatch-container {
-					& .cart-product-card-attribute-swatch {
-					}
-
-					& .cart-product-card-attribute-swatch-selected {
-					}
-				}
-			}
-		}
+		text-transform: uppercase;
 	}
 }
 
-* {
-	outline: 1px solid #f00 !important;
-}
+// * {
+// 	outline: 1px solid #f00 !important;
+// }
