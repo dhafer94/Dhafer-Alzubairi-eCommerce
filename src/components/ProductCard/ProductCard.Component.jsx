@@ -7,6 +7,7 @@ class ProductCard extends PureComponent {
 		super(props);
 		this.state = {
 			isHovering: false,
+			// currency: this.props.currency.length > 0 && this.props.currency,
 		};
 	}
 
@@ -21,12 +22,23 @@ class ProductCard extends PureComponent {
 			isHovering: false,
 		}));
 	};
+	// componentDidUpdate() {
+	// 	if (this.props.currency.length > 0) {
+	// 		this.setState({
+	// 			currency: this.props.currency,
+	// 		});
+	// 	}
+	// }
 
 	render() {
 		const { currency, product, category } = this.props;
 		const { id, name, gallery, prices, inStock } = product;
+		const { isHovering } = this.state;
 		const img = gallery[0];
-		const price = prices.find((i) => currency[0].label === i.currency.label);
+		const price =
+			currency.length > 0 &&
+			prices.find((i) => currency[0].label === i.currency.label);
+
 		return (
 			<NavLink
 				className={inStock ? 'product-card' : 'product-card-out-of-stock'}
@@ -34,7 +46,7 @@ class ProductCard extends PureComponent {
 				to={`/plp/${category}/${id}`}
 				onMouseEnter={this.handleMouseEnter}
 				onMouseLeave={this.handleMouseLeave}>
-				{this.state.isHovering && (
+				{isHovering && (
 					<svg
 						className='product-card-cart'
 						xmlns='http://www.w3.org/2000/svg'
