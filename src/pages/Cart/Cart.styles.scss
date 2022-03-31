@@ -1,8 +1,11 @@
 .cart {
+	/* top | right | bottom | left */
+
 	margin: 0 14vw 0 8vw;
 	color: #1d1f22;
 
 	.cart-title {
+		margin: 0;
 		margin-bottom: 60px;
 		font-family: 'Raleway';
 		font-style: normal;
