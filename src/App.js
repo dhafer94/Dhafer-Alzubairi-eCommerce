@@ -208,10 +208,7 @@ class App extends PureComponent {
 			if (cart.length > 0) {
 				if (cart.some((item) => item.id === AddedProductId)) {
 					const matchingItems = cart.filter((item) => item.id === AddedProductId);
-					// const newAttributes = cart.map()
-
-
-					matchingItems.map(item => {
+					matchingItems.forEach(item => {
 						if (isEqual(chosenAttributes, item.attributes)) {
 							this.setState({
 								cart: [
@@ -355,7 +352,6 @@ class App extends PureComponent {
 	};
 
 	handleIncrementDecrement = (e, i) => {
-		const id = e.target.id;
 		const name = e.target.name;
 		const cart = this.state.cart;
 
@@ -430,12 +426,11 @@ class App extends PureComponent {
 	};
 
 	render() {
-		const { productsToBeShown, currency, dataFetched, allData, dropdown, cart, chosenAttributes } = this.state;
+		const { productsToBeShown, currency, dataFetched, allData, dropdown, cart } = this.state;
 		const chosenCategory = this.props.router.params.plp;
 		const selectedCurrency = dataFetched ? this.state.currency.filter(
 			(item) => item.selected === true,
 		) : [];
-		// console.log(selectedCurrency, 'selectedCurrency');
 
 		return (
 			<div

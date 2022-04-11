@@ -11,10 +11,6 @@ import {
 } from '../../contexts';
 
 class Product extends PureComponent {
-	constructor(props) {
-		super(props);
-	}
-
 	render() {
 		return (
 			<div className={'product-profile'}>

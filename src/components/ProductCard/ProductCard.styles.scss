@@ -1,11 +1,9 @@
 .product-card {
-	// text
 	box-shadow: 0;
 	position: relative;
 	font-family: Raleway;
 	font-style: normal;
 	font-size: 18px;
-	// line-height: 1vh;
 	text-decoration: none;
 	color: #1d1f22;
 
@@ -13,19 +11,14 @@
 	flex-direction: column;
 	align-items: flex-start;
 	padding: 15px;
-	// width: fit-content;
 	height: 60vh;
-	// border: 1px solid #000;
 
 	& .product-img {
-		// width: 24.5vw;
-		// align-self: center;
-		align-self: stretch;
+		align-self: center;
 		flex-grow: 0;
 		margin: 0px 0px;
 	}
 	& .product-card-cart {
-		// width: 300px;
 		position: absolute;
 		right: 15px;
 		bottom: 10vh;
@@ -35,9 +28,6 @@
 		flex-direction: column;
 		align-items: flex-start;
 		color: #1d1f22;
-		// align-content: flex-start;
-		// text-align: left;
-		// border: 1px solid #000;
 
 		& .product-title {
 			font-weight: 300;
@@ -60,7 +50,6 @@
 	background: #ffffff;
 
 	& .product-out-of-Stock-txt {
-		// color: #8d8f9a;
 		text-transform: uppercase;
 		position: absolute;
 		align-self: center;

@@ -9,10 +9,6 @@ import {
 } from '../../contexts';
 
 class Cart extends PureComponent {
-	constructor(props) {
-		super(props);
-	}
-
 	render() {
 		return (
 			<div className={'cart'}>

@@ -1,21 +1,18 @@
 .product-image-description {
 	margin-left: 2.7vw;
 	// /* Group 625 */
-	// position: absolute;
 	display: flex;
 	flex-direction: row;
 	justify-content: left;
 	align-items: center;
 	width: 69.5vw;
 	height: auto;
-	// border: 1px solid #000;
 
 	& .product-primary-image {
 		/* Image */
-		width: 28vw;
+		// width: 28vw;
 		height: 70vh;
 		align-self: flex-start;
-		// border: 1px solid #000;
 	}
 	& .product-box {
 		margin: 0;
@@ -23,10 +20,8 @@
 		flex-direction: column;
 		margin-left: 100px;
 		/* Group 624 */
-		// position: absolute;
 		width: 21vw;
 		height: auto;
-		// border: 1px solid #000;
 
 		& .product-brand {
 			font-weight: 600;
@@ -161,22 +156,16 @@
 .secondary-images {
 	display: flex;
 	flex-direction: column;
-	// flex-wrap: wrap;
 	position: relative;
 	justify-items: center;
 	align-items: flex-end;
-	// align-content: flex-start;
-	// justify-content: flex-start;
 	overflow-y: scroll;
 	overflow-x: hidden;
-	// width: 15vw;
-	// text-align: center;
 	height: 70vh;
 	direction: rtl;
 
 	& .product-secondary-image {
 		width: 80px;
-		height: 80px;
 		cursor: pointer;
 		padding-top: 1vh;
 		padding-left: 2vh;
@@ -184,6 +173,7 @@
 
 	& .product-secondary-image-active {
 		@extend .product-secondary-image;
+		padding: 0;
 		margin: 20px;
 		box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.3);
 		transform: scale(1.2);

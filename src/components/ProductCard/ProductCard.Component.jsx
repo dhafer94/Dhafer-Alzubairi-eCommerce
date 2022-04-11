@@ -7,7 +7,6 @@ class ProductCard extends PureComponent {
 		super(props);
 		this.state = {
 			isHovering: false,
-			// currency: this.props.currency.length > 0 && this.props.currency,
 		};
 	}
 
@@ -22,13 +21,6 @@ class ProductCard extends PureComponent {
 			isHovering: false,
 		}));
 	};
-	// componentDidUpdate() {
-	// 	if (this.props.currency.length > 0) {
-	// 		this.setState({
-	// 			currency: this.props.currency,
-	// 		});
-	// 	}
-	// }
 
 	render() {
 		const { currency, product, category } = this.props;
@@ -38,7 +30,6 @@ class ProductCard extends PureComponent {
 		const price =
 			currency.length > 0 &&
 			prices.find((i) => currency[0].label === i.currency.label);
-
 		return (
 			<NavLink
 				className={inStock ? 'product-card' : 'product-card-out-of-stock'}

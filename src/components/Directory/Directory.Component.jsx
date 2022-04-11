@@ -2,15 +2,10 @@ import React, { PureComponent } from 'react';
 import './Directory.styles.scss';
 import ProductCard from '../ProductCard/ProductCard.Component';
 import { withRouter } from '../../withRouter';
-class Directory extends PureComponent {
-	constructor(props) {
-		super(props);
-	}
 
+class Directory extends PureComponent {
 	render() {
 		const { currency, products, dataFetched, category } = this.props;
-		// const category = this.props.router.params.plp;
-		// console.log(category);
 		return (
 			<>
 				<h2 className='category-name'>{category}</h2>

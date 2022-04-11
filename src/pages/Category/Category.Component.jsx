@@ -10,10 +10,6 @@ import {
 import { withRouter } from '../../withRouter';
 
 class Category extends PureComponent {
-	constructor(props) {
-		super(props);
-	}
-
 	render() {
 		return (
 			<div className={'category-page'}>

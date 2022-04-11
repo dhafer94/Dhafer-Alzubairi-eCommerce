@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import './ProductProfile.styles.scss';
 import { withRouter } from '../../withRouter';
-import { DropdownContext } from '../../contexts';
 
 class ProductProfile extends PureComponent {
 	constructor(props) {
