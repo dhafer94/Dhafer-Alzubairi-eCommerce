@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import './ProductProfile.styles.scss';
 import { withRouter } from '../../withRouter';
+import parse from 'html-react-parser';
 
 class ProductProfile extends PureComponent {
 	constructor(props) {
@@ -11,6 +12,7 @@ class ProductProfile extends PureComponent {
 			category: this.props.router.params.plp,
 			product: {},
 			primaryImg: '',
+			readMore: false,
 		};
 	}
 
@@ -44,6 +46,11 @@ class ProductProfile extends PureComponent {
 			primaryImg: src,
 		});
 	};
+	parsing = () => {
+		const text = this.state.product.description;
+		// console.log(text);
+		return text;
+	};
 
 	render() {
 		const {
@@ -57,10 +64,11 @@ class ProductProfile extends PureComponent {
 			inStock,
 		} = this.state.product;
 		const { currency, handleAttributeClick } = this.props;
-		const { primaryImg } = this.state;
-		const createMarkup = () => {
-			return { __html: description };
-		};
+		const { primaryImg, readMore } = this.state;
+		// const createMarkup = () => {
+		// 	return { __html: description };
+		// };
+		// console.log(parse(description));
 
 		return (
 			<>
@@ -171,11 +179,39 @@ class ProductProfile extends PureComponent {
 										out of stock
 									</button>
 								)}
-
-								<div
-									className='product-description-box'
-									dangerouslySetInnerHTML={createMarkup()}
-								/>
+								{description.length > 250 ? (
+									<div
+										id='product-description-box'
+										className='product-description-box'
+										// dangerouslySetInnerHTML={createMarkup()}
+									>
+										<div>
+											{readMore
+												? parse(description)
+												: parse(
+														description
+															.substring(0, 170)
+															.concat('<span className=dots> .....</span>'),
+												  )}
+											<a
+												href='#product-description-box'
+												className='product-description-btn'
+												onClick={() =>
+													this.setState({
+														readMore: !readMore,
+													})
+												}>
+												{readMore ? 'Read less' : 'Read more'}
+											</a>
+										</div>
+									</div>
+								) : (
+									<div
+										id='product-description-box'
+										className='product-description-box'>
+										{parse(description)}
+									</div>
+								)}
 							</div>
 						</div>
 					</>
