@@ -160,6 +160,7 @@ class ProductProfile extends PureComponent {
 									)}
 								{inStock ? (
 									<button
+										btnname='pdp'
 										onClick={this.props.handleAddToCart}
 										id={id}
 										className='add-to-cart-btn'>

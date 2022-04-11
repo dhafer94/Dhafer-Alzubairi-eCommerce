@@ -106,11 +106,9 @@ class App extends PureComponent {
 			const productsToBeShown = this.state.allData.filter((category) => {
 				return category.name === this.props.router.params.plp && category.products;
 			})[0].products;
-			// console.log(products);
 
 			return this.setState({
 				productsToBeShown: productsToBeShown,
-				// products: products
 			});
 		}
 		if (this.props.router.location.pathname === '/') {
@@ -138,7 +136,6 @@ class App extends PureComponent {
 		const value = e.target.attributes.attributeval.nodeValue;
 		const type = e.target.attributes.type.nodeValue;
 		const id = e.target.id;
-		// console.log(type);
 
 		//to reset the previous active attribute/s and visually set the active attribute visually
 		if (e.target.className === 'product-attribute') {
@@ -184,24 +181,40 @@ class App extends PureComponent {
 	handleAddToCart = (e) => {
 		const { products, cart } = this.state;
 		const AddedProductId = e.target.id;
-		const chosenAttributes = this.state.chosenAttributes.filter((att) => att.id === AddedProductId);
+
 		const AddedProduct = products.find((product) => product.id === AddedProductId);
 		const { name, brand, prices, attributes, id, gallery } = AddedProduct;
 
+		//To add the chosen attributes when adding a product from pdp and choose first one as default when adding from plp
+		const chosenAttributes = e.target.attributes.btnname.value === 'pdp' ? this.state.chosenAttributes.filter((att) => att.id === AddedProductId) : attributes.map(att =>
+		({
+			id: id,
+			name: att.name,
+			value: att.items[0].value,
+			type: att.type
+		}));
 
-		const allAttributes = attributes.map(att => (
+		const allAttributes = e.target.attributes.btnname.value === 'pdp' ? attributes.map(att => (
 			att.items.map(attr => (
 				{
-					value: attr.value, id: AddedProductId,
+					value: attr.value,
+					id: AddedProductId,
 					name: att.name,
 					type: att.type,
 					selected: chosenAttributes.some(i => i.name === att.name && i.value === attr.value)
 				}))
-		));
+		)) : attributes.map(att =>
+			att.items.map((attr, i) =>
+			({
+				name: att.name,
+				id: AddedProductId,
 
+				value: attr.value,
+				type: att.type,
+				selected: i === 0 ? true : false
 
-		// console.log(allAttributes, 'allAttributes');
-		// console.log(chosenAttributes.map(item => console.log(item.name && item.value, 'item.name')));
+			})));
+
 		//To only add the product to the cart when attributes has been chosen
 		//a popup to choose the correct one can be shown to the user otherwise, in the meantime an alert is implemented
 		if (chosenAttributes.length === attributes.length) {
@@ -292,17 +305,19 @@ class App extends PureComponent {
 		} else {
 			const chosenAttributesNames = chosenAttributes.filter((att) => att.id === AddedProductId).map((att) => att.name);
 			const notAddedAttributes = attributes.map(att => att.name).filter((attr) => !chosenAttributesNames.includes(attr));
-			if (notAddedAttributes.length === 1) {
-				const alert = notAddedAttributes.map(att => att);
-				window.alert(`Please select one of the available options for your ${name}:\n${alert.map((att) => ` ${att}`)
-					} `);
-			}
-			else {
-				const alert = notAddedAttributes.map(att => att);
-				window.alert(`Please select one of the available options for your ${name}:\n${alert.map((att) => ` ${att}`).slice(0, -1)} and ${alert[alert.length - 1]
-					} `);
-			}
-		};
+			if (e.target.attributes.btnname.value === 'pdp') {
+				if (notAddedAttributes.length === 1) {
+					const alert = notAddedAttributes.map(att => att);
+					window.alert(`Please select one of the available options for your ${name}:\n${alert.map((att) => ` ${att}`)
+						} `);
+				}
+				else {
+					const alert = notAddedAttributes.map(att => att);
+					window.alert(`Please select one of the available options for your ${name}:\n${alert.map((att) => ` ${att}`).slice(0, -1)} and ${alert[alert.length - 1]
+						} `);
+				}
+			};
+		}
 	};
 
 	//Listen to clicks anywhere on the page to control dropdown active, inactive state
@@ -410,6 +425,7 @@ class App extends PureComponent {
 		const name = e.target.name;
 		const cartId = 'navbar-cart';
 		const currencyId = 'navbar-currency';
+
 		//Added cart-overlay id to all it's elements
 		const cartOverlayId = 'cart-overlay';
 
