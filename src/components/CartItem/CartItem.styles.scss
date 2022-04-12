@@ -2,7 +2,7 @@
 	display: flex;
 	flex-direction: column;
 	flex-wrap: wrap;
-	
+
 	& .cart-overlay-item-attributes-group-container {
 		& .cart-overlay-item-attributes-other-container {
 			display: flex;
@@ -27,6 +27,7 @@
 				align-items: center;
 				margin-right: 10px;
 				margin-top: 5px;
+				cursor: pointer;
 			}
 
 			& .cart-overlay-item-attribute-box {

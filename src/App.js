@@ -32,7 +32,259 @@ class App extends PureComponent {
 				cartOverlay: 'inactive'
 			},
 			chosenAttributes: [],
-			cart: []
+			cart: [
+				{
+					"name": "iMac 2021",
+					"brand": "Apple",
+					"prices": [
+						{
+							"__typename": "Price",
+							"currency": {
+								"__typename": "Currency",
+								"label": "USD",
+								"symbol": "$"
+							},
+							"amount": 1688.03
+						},
+						{
+							"__typename": "Price",
+							"currency": {
+								"__typename": "Currency",
+								"label": "GBP",
+								"symbol": "£"
+							},
+							"amount": 1213.34
+						},
+						{
+							"__typename": "Price",
+							"currency": {
+								"__typename": "Currency",
+								"label": "AUD",
+								"symbol": "A$"
+							},
+							"amount": 2177.57
+						},
+						{
+							"__typename": "Price",
+							"currency": {
+								"__typename": "Currency",
+								"label": "JPY",
+								"symbol": "¥"
+							},
+							"amount": 182294.51
+						},
+						{
+							"__typename": "Price",
+							"currency": {
+								"__typename": "Currency",
+								"label": "RUB",
+								"symbol": "₽"
+							},
+							"amount": 127653.82
+						}
+					],
+					"id": "apple-imac-2021",
+					"attributes": [
+						{
+							"id": "apple-imac-2021",
+							"name": "Capacity",
+							"value": "256GB",
+							"type": "text"
+						},
+						{
+							"id": "apple-imac-2021",
+							"name": "With USB 3 ports",
+							"value": "Yes",
+							"type": "text"
+						},
+						{
+							"id": "apple-imac-2021",
+							"name": "Touch ID in keyboard",
+							"value": "Yes",
+							"type": "text"
+						}
+					],
+					"quantity": 1,
+					"gallery": [
+						"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/imac-24-blue-selection-hero-202104?wid=904&hei=840&fmt=jpeg&qlt=80&.v=1617492405000"
+					],
+					"allAttributes": [
+						[
+							{
+								"value": "256GB",
+								"id": "apple-imac-2021",
+								"name": "Capacity",
+								"type": "text",
+								"selected": true
+							},
+							{
+								"value": "512GB",
+								"id": "apple-imac-2021",
+								"name": "Capacity",
+								"type": "text",
+								"selected": false
+							}
+						],
+						[
+							{
+								"value": "Yes",
+								"id": "apple-imac-2021",
+								"name": "With USB 3 ports",
+								"type": "text",
+								"selected": true
+							},
+							{
+								"value": "No",
+								"id": "apple-imac-2021",
+								"name": "With USB 3 ports",
+								"type": "text",
+								"selected": false
+							}
+						],
+						[
+							{
+								"value": "Yes",
+								"id": "apple-imac-2021",
+								"name": "Touch ID in keyboard",
+								"type": "text",
+								"selected": true
+							},
+							{
+								"value": "No",
+								"id": "apple-imac-2021",
+								"name": "Touch ID in keyboard",
+								"type": "text",
+								"selected": false
+							}
+						]
+					]
+				},
+				{
+					"name": "iPhone 12 Pro",
+					"brand": "Apple",
+					"prices": [
+						{
+							"__typename": "Price",
+							"currency": {
+								"__typename": "Currency",
+								"label": "USD",
+								"symbol": "$"
+							},
+							"amount": 1000.76
+						},
+						{
+							"__typename": "Price",
+							"currency": {
+								"__typename": "Currency",
+								"label": "GBP",
+								"symbol": "£"
+							},
+							"amount": 719.34
+						},
+						{
+							"__typename": "Price",
+							"currency": {
+								"__typename": "Currency",
+								"label": "AUD",
+								"symbol": "A$"
+							},
+							"amount": 1290.99
+						},
+						{
+							"__typename": "Price",
+							"currency": {
+								"__typename": "Currency",
+								"label": "JPY",
+								"symbol": "¥"
+							},
+							"amount": 108074.6
+						},
+						{
+							"__typename": "Price",
+							"currency": {
+								"__typename": "Currency",
+								"label": "RUB",
+								"symbol": "₽"
+							},
+							"amount": 75680.48
+						}
+					],
+					"id": "apple-iphone-12-pro",
+					"attributes": [
+						{
+							"id": "apple-iphone-12-pro",
+							"name": "Color",
+							"value": "#03FFF7",
+							"type": "swatch"
+						},
+						{
+							"id": "apple-iphone-12-pro",
+							"name": "Capacity",
+							"value": "1T",
+							"type": "text"
+						}
+					],
+					"quantity": 1,
+					"gallery": [
+						"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-pro-family-hero?wid=940&amp;hei=1112&amp;fmt=jpeg&amp;qlt=80&amp;.v=1604021663000"
+					],
+					"allAttributes": [
+						[
+							{
+								"value": "512G",
+								"id": "apple-iphone-12-pro",
+								"name": "Capacity",
+								"type": "text",
+								"selected": false
+							},
+							{
+								"value": "1T",
+								"id": "apple-iphone-12-pro",
+								"name": "Capacity",
+								"type": "text",
+								"selected": true
+							}
+						],
+						[
+							{
+								"value": "#44FF03",
+								"id": "apple-iphone-12-pro",
+								"name": "Color",
+								"type": "swatch",
+								"selected": false
+							},
+							{
+								"value": "#03FFF7",
+								"id": "apple-iphone-12-pro",
+								"name": "Color",
+								"type": "swatch",
+								"selected": true
+							},
+							{
+								"value": "#030BFF",
+								"id": "apple-iphone-12-pro",
+								"name": "Color",
+								"type": "swatch",
+								"selected": false
+							},
+							{
+								"value": "#000000",
+								"id": "apple-iphone-12-pro",
+								"name": "Color",
+								"type": "swatch",
+								"selected": false
+							},
+							{
+								"value": "#FFFFFF",
+								"id": "apple-iphone-12-pro",
+								"name": "Color",
+								"type": "swatch",
+								"selected": false
+							}
+						]
+					]
+				}
+			]
 		};
 	}
 
@@ -418,6 +670,43 @@ class App extends PureComponent {
 		}
 	};
 
+	handleCartAttributesChange = (e, attr, attIndex, itemIndex) => {
+		// console.log(e, 'e');
+		console.log(attr.value, 'attr');
+		// console.log(itemIndex, 'itemIndex');
+		// console.log(attIndex, 'attIndex');
+		const cart = this.state.cart;
+		const cartItem = cart[itemIndex];
+		const itemAttributes = cartItem.allAttributes[attIndex];
+		const allAttributes = cartItem.allAttributes;
+		const newAttribute = itemAttributes.map(att =>
+		({
+			id: att.id,
+			name: att.name,
+			selected: attr.selected === att.selected && attr.value === att.value,
+			type: att.type,
+			value: att.value,
+		})
+		);
+		allAttributes.splice(attIndex, 1, newAttribute);
+
+		const newItem = {
+			name: cartItem.name,
+			brand: cartItem.brand,
+			prices: cartItem.prices,
+			id: cartItem.id,
+			attributes: cartItem.attributes,
+			quantity: cartItem.quantity,
+			gallery: cartItem.gallery,
+			allAttributes: allAttributes,
+		};
+		cart.splice(itemIndex, 1, newItem);
+
+		this.setState({
+			cart: [...cart]
+		});
+
+	};
 	//to hide dropdown and cart overlay when clicking anywhere else on the page
 	resetter = (e) => {
 		const id = e.target.id;
@@ -446,6 +735,7 @@ class App extends PureComponent {
 		const selectedCurrency = dataFetched ? this.state.currency.filter(
 			(item) => item.selected === true,
 		) : [];
+		console.log(cart, 'cart');
 
 		return (
 			<div
@@ -477,7 +767,8 @@ class App extends PureComponent {
 													dropdown={dropdown.cartOverlay}
 													handleIncrementDecrement={this.handleIncrementDecrement}
 													currency={selectedCurrency}
-													cart={cart} />
+													cart={cart}
+													handleCartAttributesChange={this.handleCartAttributesChange} />
 											</CategoryProductsContext.Provider>
 										</CurrencyContext.Provider>
 									</DataFetchedContext.Provider>
