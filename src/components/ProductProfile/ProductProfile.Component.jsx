@@ -2,42 +2,88 @@ import React, { PureComponent } from 'react';
 import './ProductProfile.styles.scss';
 import { withRouter } from '../../withRouter';
 import parse from 'html-react-parser';
+import { gql } from '@apollo/client';
 
 class ProductProfile extends PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
 			allData: [],
+			dataFetched: false,
 			productId: this.props.router.params.pdp,
 			category: this.props.router.params.plp,
 			product: {},
 			primaryImg: '',
 			readMore: false,
+			currency: this.props.currency,
 		};
 	}
 
 	componentDidMount() {
-		this.setState({
-			allData: this.props.allData,
-		});
+		const controller = new AbortController();
+		this.props.client
+			.query({
+				query: gql`
+					{
+						categories {
+							name
+							products {
+								id
+								category
+								name
+								gallery
+								prices {
+									currency {
+										label
+										symbol
+									}
+									amount
+								}
+								brand
+								inStock
+								attributes {
+									name
+									type
+									items {
+										value
+									}
+								}
+								description
+							}
+						}
+					}
+				`,
+			})
+			.then((res) => {
+				if (!this.state.dataFetched) {
+					this.setState({
+						allData: res.data.categories.map((item) => item),
+						dataFetched: true,
+					});
+				}
+			});
+		return () => {
+			controller.abort();
+		};
 	}
 
 	componentDidUpdate() {
 		this.setState({
-			allData: this.props.allData,
+			allData: this.state.allData,
+			currency: this.props.currency,
 		});
-		if (this.state.allData[0]) {
-			const product = this.state.allData
-				.filter((category) => category.name === this.state.category)[0]
-				.products.find((i) => i.id === this.state.productId);
-			this.setState({
-				product: product,
-				primaryImg:
-					this.state.primaryImg.length === 0
-						? product.gallery[0]
-						: this.state.primaryImg,
-			});
-		}
+		// if (this.state.allData.length > 0) {
+		const product = this.state.allData
+			.filter((category) => category.name === this.state.category)[0]
+			.products.find((i) => i.id === this.state.productId);
+		this.setState({
+			product: product,
+			primaryImg:
+				this.state.primaryImg.length === 0
+					? product.gallery[0]
+					: this.state.primaryImg,
+		});
+		// }
 	}
 
 	handleSecondaryImageClick = (e) => {
@@ -45,11 +91,6 @@ class ProductProfile extends PureComponent {
 		this.setState({
 			primaryImg: src,
 		});
-	};
-	parsing = () => {
-		const text = this.state.product.description;
-		// console.log(text);
-		return text;
 	};
 
 	render() {
@@ -63,16 +104,14 @@ class ProductProfile extends PureComponent {
 			id,
 			inStock,
 		} = this.state.product;
-		const { currency, handleAttributeClick } = this.props;
-		const { primaryImg, readMore } = this.state;
+		const { handleAttributeClick } = this.props;
+		const { primaryImg, readMore, currency } = this.state;
 		// const createMarkup = () => {
 		// 	return { __html: description };
 		// };
-		// console.log(parse(description));
-
 		return (
 			<>
-				{gallery ? (
+				{typeof gallery !== 'undefined' ? (
 					<>
 						<aside className='secondary-images'>
 							{gallery.map((img, i) => (
@@ -106,7 +145,7 @@ class ProductProfile extends PureComponent {
 								{typeof attributes !== 'undefined' &&
 									attributes.map((attribute, i) =>
 										attribute.type === 'swatch' ? (
-											<div key={i}>
+											<div className='product-attribute-container' key={i}>
 												<p
 													key={i + 10}
 													className='product-attribute-name'>{`${attributes[i].name}:`}</p>
@@ -133,7 +172,7 @@ class ProductProfile extends PureComponent {
 												</div>
 											</div>
 										) : (
-											<div key={i + 20}>
+											<div className='product-attribute-container' key={i + 20}>
 												<p
 													key={i + 10}
 													className='product-attribute-name'>{`${attributes[i].name}:`}</p>
@@ -158,8 +197,9 @@ class ProductProfile extends PureComponent {
 											</div>
 										),
 									)}
-								<p className='product-attribute-name'>price:</p>
+								<p className='product-price-title'>price:</p>
 								{typeof prices !== 'undefined' &&
+									currency.length > 0 &&
 									prices.map(
 										(price, i) =>
 											price.currency.label === currency[0].label && (
@@ -187,25 +227,53 @@ class ProductProfile extends PureComponent {
 										className='product-description-box'
 										// dangerouslySetInnerHTML={createMarkup()}
 									>
-										<div>
-											{readMore
-												? parse(description)
-												: parse(
-														description
-															.substring(0, 170)
-															.concat('<span className=dots> .....</span>'),
-												  )}
-											<a
-												href='#product-description-box'
-												className='product-description-btn'
-												onClick={() =>
-													this.setState({
-														readMore: !readMore,
-													})
-												}>
-												{readMore ? 'Read less' : 'Read more'}
-											</a>
-										</div>
+										{readMore
+											? parse(description.concat(`<p className=dots></p>`), {
+													trim: true,
+													replace: ({ attribs }) => {
+														if (attribs && attribs.classname === 'dots') {
+															return (
+																<a
+																	href='#product-description-box'
+																	className='product-description-btn-less'
+																	onClick={() =>
+																		this.setState({
+																			readMore: !readMore,
+																		})
+																	}>
+																	Read less
+																</a>
+															);
+														}
+													},
+											  })
+											: parse(
+													description
+														.substring(0, 250)
+														.concat(`<span className=dots> .....</span>`),
+													{
+														trim: true,
+														replace: ({ attribs }) => {
+															if (attribs && attribs.classname === 'dots') {
+																return (
+																	<span className='dots'>
+																		.....
+																		<a
+																			href='#product-description-box'
+																			className='product-description-btn-more'
+																			onClick={() =>
+																				this.setState({
+																					readMore: !readMore,
+																				})
+																			}>
+																			Read more
+																		</a>
+																	</span>
+																);
+															}
+														},
+													},
+											  )}
 									</div>
 								) : (
 									<div

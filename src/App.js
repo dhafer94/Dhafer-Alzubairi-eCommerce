@@ -7,7 +7,6 @@ import { gql } from '@apollo/client';
 import {
 	CategoryProductsContext,
 	CurrencyContext,
-	AllDataContext,
 	DataFetchedContext,
 	ChosenCategoryContext,
 	HandleAddToCartContext,
@@ -442,7 +441,7 @@ class App extends PureComponent {
 	};
 
 	render() {
-		const { productsToBeShown, currency, dataFetched, allData, dropdown, cart } = this.state;
+		const { productsToBeShown, currency, dataFetched, dropdown, cart } = this.state;
 		const chosenCategory = this.props.router.params.plp;
 		const selectedCurrency = dataFetched ? this.state.currency.filter(
 			(item) => item.selected === true,
@@ -469,20 +468,18 @@ class App extends PureComponent {
 							<HandleAddToCartContext.Provider value={this.handleAddToCart}>
 								<ChosenCategoryContext.Provider value={chosenCategory}>
 									<DataFetchedContext.Provider value={dataFetched}>
-										<AllDataContext.Provider value={allData}>
-											<CurrencyContext.Provider value={selectedCurrency}>
-												<CategoryProductsContext.Provider value={productsToBeShown}>
-													<div className={dropdown.cartOverlay === 'active' ? 'opacity' : 'normal'}>
-														<Outlet />
-													</div>
-													<CartOverlay
-														dropdown={dropdown.cartOverlay}
-														handleIncrementDecrement={this.handleIncrementDecrement}
-														currency={selectedCurrency}
-														cart={cart} />
-												</CategoryProductsContext.Provider>
-											</CurrencyContext.Provider>
-										</AllDataContext.Provider>
+										<CurrencyContext.Provider value={selectedCurrency}>
+											<CategoryProductsContext.Provider value={productsToBeShown}>
+												<div className={dropdown.cartOverlay === 'active' ? 'opacity' : 'normal'}>
+													<Outlet />
+												</div>
+												<CartOverlay
+													dropdown={dropdown.cartOverlay}
+													handleIncrementDecrement={this.handleIncrementDecrement}
+													currency={selectedCurrency}
+													cart={cart} />
+											</CategoryProductsContext.Provider>
+										</CurrencyContext.Provider>
 									</DataFetchedContext.Provider>
 								</ChosenCategoryContext.Provider>
 							</HandleAddToCartContext.Provider>

@@ -4,7 +4,6 @@ import ProductProfile from '../../components/ProductProfile/ProductProfile.Compo
 import {
 	CategoryProductsContext,
 	CurrencyContext,
-	AllDataContext,
 	DataFetchedContext,
 	HandleAddToCartContext,
 	HandleAttributeClickContext,
@@ -12,6 +11,8 @@ import {
 
 class Product extends PureComponent {
 	render() {
+		const { client } = this.props;
+
 		return (
 			<div className={'product-profile'}>
 				<HandleAttributeClickContext.Consumer>
@@ -22,28 +23,22 @@ class Product extends PureComponent {
 									{(currency) => (
 										<DataFetchedContext.Consumer>
 											{(dataFetched) => (
-												<AllDataContext.Consumer>
-													{(allData) => (
-														<CurrencyContext.Consumer>
-															{(currency) => (
-																<CategoryProductsContext.Consumer>
-																	{(products) => (
-																		<ProductProfile
-																			currency={currency}
-																			products={products}
-																			allData={allData}
-																			dataFetched={dataFetched}
-																			handleAddToCart={handleAddToCart}
-																			handleAttributeClick={
-																				handleAttributeClick
-																			}
-																		/>
-																	)}
-																</CategoryProductsContext.Consumer>
+												<CurrencyContext.Consumer>
+													{(currency) => (
+														<CategoryProductsContext.Consumer>
+															{(products) => (
+																<ProductProfile
+																	client={client}
+																	currency={currency}
+																	products={products}
+																	dataFetched={dataFetched}
+																	handleAddToCart={handleAddToCart}
+																	handleAttributeClick={handleAttributeClick}
+																/>
 															)}
-														</CurrencyContext.Consumer>
+														</CategoryProductsContext.Consumer>
 													)}
-												</AllDataContext.Consumer>
+												</CurrencyContext.Consumer>
 											)}
 										</DataFetchedContext.Consumer>
 									)}
