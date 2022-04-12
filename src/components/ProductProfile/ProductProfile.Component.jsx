@@ -93,11 +93,13 @@ class ProductProfile extends PureComponent {
 						</aside>
 
 						<div className='product-image-description'>
-							<img
-								className='product-primary-image'
-								src={primaryImg}
-								alt='product'
-							/>
+							<div className='product-primary-image-container'>
+								<img
+									className='product-primary-image'
+									src={primaryImg}
+									alt='product'
+								/>
+							</div>
 							<div className='product-box'>
 								<h2 className='product-brand'>{brand}</h2>
 								<p className='product-name'>{name}</p>

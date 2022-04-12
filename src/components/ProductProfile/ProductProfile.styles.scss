@@ -4,24 +4,32 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: left;
-	align-items: center;
+	align-items: flex-start;
 	width: 69.5vw;
 	height: auto;
 
-	& .product-primary-image {
-		/* Image */
-		max-width: 100%;
-		max-height: 70vh;
-		align-self: flex-start;
+	& .product-primary-image-container {
+		width: 30vw;
+		margin-right: 70px;
+		& .product-primary-image {
+			/* Image */
+			max-width: 30vw;
+			max-height: 70vh;
+			// align-self: center;
+		}
 	}
+
 	& .product-box {
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		margin-left: 100px;
+		// margin-left: 100px;
 		/* Group 624 */
 		width: 21vw;
 		height: auto;
+		// justify-self: flex-end;
+		position: relative;
+		right: 0;
 
 		& .product-brand {
 			font-weight: 600;
@@ -153,18 +161,24 @@
 			display: flex;
 			flex-direction: row;
 		}
-
+		& > * {
+			text-align: justify;
+		}
 		& .product-description-btn {
 			display: flex;
 			position: absolute;
 			bottom: 0px;
-			right: 0px;
-			padding: 0;
+			right: -80px;
+			padding: 5px;
 			font-weight: 600;
 			font-size: 15px;
 			color: rgba(141, 143, 154, 1);
 			cursor: pointer;
 			text-transform: capitalize;
+			margin-bottom: 10px;
+			background-color: #ffffff;
+			border-radius: 20%;
+			text-align: center;
 		}
 	}
 }
