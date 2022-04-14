@@ -72,18 +72,18 @@ class ProductProfile extends PureComponent {
 			allData: this.state.allData,
 			currency: this.props.currency,
 		});
-		// if (this.state.allData.length > 0) {
-		const product = this.state.allData
-			.filter((category) => category.name === this.state.category)[0]
-			.products.find((i) => i.id === this.state.productId);
-		this.setState({
-			product: product,
-			primaryImg:
-				this.state.primaryImg.length === 0
-					? product.gallery[0]
-					: this.state.primaryImg,
-		});
-		// }
+		if (this.state.allData.length > 0) {
+			const product = this.state.allData
+				.filter((category) => category.name === this.state.category)[0]
+				.products.find((i) => i.id === this.state.productId);
+			this.setState({
+				product: product,
+				primaryImg:
+					this.state.primaryImg.length === 0
+						? product.gallery[0]
+						: this.state.primaryImg,
+			});
+		}
 	}
 
 	handleSecondaryImageClick = (e) => {
