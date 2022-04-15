@@ -465,7 +465,8 @@ class App extends PureComponent {
 				selected: i === 0 ? true : false
 
 			})));
-
+		// console.log(allAttributes, 'allAttributes');
+		// console.log(chosenAttributes, 'chosenAttributes');
 		//To only add the product to the cart when attributes has been chosen
 		//a popup to choose the correct one can be shown to the user otherwise, in the meantime an alert is implemented
 		if (chosenAttributes.length === attributes.length) {
@@ -474,6 +475,7 @@ class App extends PureComponent {
 					// const matchingItems = cart.filter((item) => item.id === AddedProductId);
 					cart.forEach(item => {
 						if (isEqual(chosenAttributes, item.attributes)) {
+							console.log('1');
 							this.setState({
 								cart: [
 									...cart.filter(item => item.id !== AddedProductId),
@@ -493,8 +495,12 @@ class App extends PureComponent {
 
 							});
 						} else {
+							console.log('2');
+
 							const newItem = cart.filter(item => item.id === AddedProductId && isEqual(chosenAttributes, item.attributes));
 							if (newItem.length > 0) {
+								console.log('2.1');
+
 								newItem.splice(0, 1, {
 									name: newItem[0].name,
 									brand: newItem[0].brand,
@@ -505,33 +511,44 @@ class App extends PureComponent {
 									gallery: newItem[0].gallery,
 									allAttributes: newItem[0].allAttributes,
 								});
-							}
-							if (newItem.length <= 0) {
-								newItem.splice(0, 0, {
-									name: item.name,
-									brand: item.brand,
-									prices: item.prices,
-									id: item.id,
-									attributes: chosenAttributes,
-									quantity: 1,
-									gallery: item.gallery,
-									allAttributes: allAttributes,
+								this.setState({
+									cart: [
+										...cart.filter(item => item.id !== AddedProductId),
+										...cart.filter(item => item.id === AddedProductId && !isEqual(chosenAttributes, item.attributes)),
+										...newItem,
+									]
+
 								});
 							}
-							this.setState({
-								cart: [
-									...cart.filter(item => item.id !== AddedProductId),
-									...cart.filter(item => item.id === AddedProductId && !isEqual(chosenAttributes, item.attributes)),
-									...newItem,
-								]
+							if (newItem.length <= 0) {
+								console.log('2.2');
 
-							});
+								newItem.splice(0, 0, {
+									name: name,
+									brand: brand,
+									prices: prices,
+									id: id,
+									attributes: chosenAttributes,
+									quantity: 1,
+									gallery: gallery,
+									allAttributes: allAttributes,
+								});
+								this.setState({
+									cart: [
+										...cart.filter(item => item.id !== AddedProductId),
+										...cart.filter(item => item.id === AddedProductId && !isEqual(chosenAttributes, item.attributes)),
+										...newItem,
+									]
 
+								});
+							}
 						}
 
 					});
 				}
 				else {
+					console.log('3');
+
 					this.setState({
 						cart: [
 							...this.state.cart,
@@ -551,6 +568,7 @@ class App extends PureComponent {
 			}
 			else {
 				console.log('4');
+
 				this.setState({
 					cart: [
 						...this.state.cart,
@@ -691,7 +709,8 @@ class App extends PureComponent {
 		// console.log(attIndex, 'attIndex');
 		const cart = [...this.state.cart];
 		const cartItem = cart[itemIndex];
-		const itemAttributes = cartItem.allAttributes[attIndex];
+
+		const itemAttributes = [...cartItem.allAttributes[attIndex]];
 		const allAttributes = [...cartItem.allAttributes];
 		const newAttribute = itemAttributes.map(att =>
 		({
@@ -714,29 +733,7 @@ class App extends PureComponent {
 			type: attr.type
 		}) : []).flat();
 
-		const newCart = this.state.cart.map((item, i) =>
-			i === itemIndex ?
-				({
-					name: item.name,
-					brand: item.brand,
-					prices: item.prices,
-					id: item.id,
-					attributes: chosenAttributes,
-					quantity: item.quantity,
-					gallery: item.gallery,
-					allAttributes: allAttributes,
-				}) :
-				({
-					name: item.name,
-					brand: item.brand,
-					prices: item.prices,
-					id: item.id,
-					attributes: item.attributes,
-					quantity: item.quantity,
-					gallery: item.gallery,
-					allAttributes: item.allAttributes,
-				})
-		);
+
 		// change the existing attribute
 		// cart.splice(itemIndex, 1, ({
 		// 	name: cartItem.name,
@@ -750,53 +747,224 @@ class App extends PureComponent {
 		// }));
 
 		// console.log(newCart, 'newCart');
-		// console.log(cart, 'cart');
+		// console.log(newCart, 'newCart');
+		// console.log(cartItem);
+
 
 		// if (!isEqual(cart, newCart)) {
-		// 	this.state.cart.forEach((item, i) =>
-		// 		newCart.forEach((newItem, i2) => {
-		// 			if (isEqual(item.attributes, newItem.attributes) && i !== i2) {
-		// 				// console.log(item.attributes, newItem.attributes, 'yes');
-		// 				newCart.splice(i, 1);
-		// 				const addquantity = {
+		const newItem = cart.filter((item, i) => isEqual(item.attributes, chosenAttributes) && i !== itemIndex);
+
+		const clickedItem = cart.filter((item, i) => i === itemIndex);
+
+		const newCart = this.state.cart.filter((item, i) => i !== itemIndex);
+
+		// console.log(newCart, 'newCart');
+		// const newCart =
+		if (newCart.length > 0) {
+			newCart.forEach((item, i) => {
+				if (!isEqual(item.allAttributes, allAttributes)) {
+					if (item.id !== attr.id) {
+						console.log(item.id !== attr.id, item, 'item.id !== attr.id');
+						newCart.splice(i, 1, {
+							name: clickedItem[0].name,
+							brand: clickedItem[0].brand,
+							prices: clickedItem[0].prices,
+							id: clickedItem[0].id,
+							attributes: chosenAttributes,
+							quantity: clickedItem[0].quantity,
+							gallery: clickedItem[0].gallery,
+							allAttributes: allAttributes,
+						});
+					}
+					if (item.id === attr.id) {
+						console.log(item.id === attr.id, item, 'item.id === attr.id');
+
+						newCart.splice(i, 1, {
+							name: item.name,
+							brand: item.brand,
+							prices: item.prices,
+							id: item.id,
+							attributes: chosenAttributes,
+							quantity: item.quantity,
+							gallery: item.gallery,
+							allAttributes: allAttributes,
+						});
+						// this.setState({
+						// 	cart: [...newCart]
+						// });
+					}
+				}
+				if (isEqual(item.allAttributes, allAttributes) && item.id === attr.id) {
+					console.log('isEqual(item.attributes, clickedItem[0].attributes) && item.id === attr.id)');
+					newCart.splice(itemIndex, 1);
+					newCart.splice(i, 1, {
+						name: cartItem.name,
+						brand: cartItem.brand,
+						prices: cartItem.prices,
+						id: cartItem.id,
+						attributes: chosenAttributes,
+						quantity: item.quantity + cartItem.quantity,
+						gallery: cartItem.gallery,
+						allAttributes: allAttributes,
+					}
+					);
+					// this.setState({
+					// 	cart: [...newCart]
+					// });
+				}
+				// if (!isEqual(item.allAttributes, allAttributes)) {
+				// 	if (item.id !== attr.id) {
+				// 		console.log(item.id !== attr.id, item, 'item.id !== attr.id');
+
+				// 		newCart.splice(itemIndex, 1, {
+				// 			name: cartItem.name,
+				// 			brand: cartItem.brand,
+				// 			prices: cartItem.prices,
+				// 			id: cartItem.id,
+				// 			attributes: chosenAttributes,
+				// 			quantity: cartItem.quantity,
+				// 			gallery: cartItem.gallery,
+				// 			allAttributes: allAttributes,
+				// 		});
+				// 		this.setState({
+				// 			cart: [...newCart]
+				// 		});
+				// 	}
+
+
+
+				// }
+			}
+			);
+			// } else {
+			// 	console.log('else');
+			// 	newCart.splice(itemIndex, 1, {
+			// 		name: cartItem.name,
+			// 		brand: cartItem.brand,
+			// 		prices: cartItem.prices,
+			// 		id: cartItem.id,
+			// 		attributes: chosenAttributes,
+			// 		quantity: cartItem.quantity,
+			// 		gallery: cartItem.gallery,
+			// 		allAttributes: allAttributes,
+			// 	});
+			// this.setState({
+			// 	cart: [...newCart]
+			// });
+		}
+		this.setState({
+			cart: [...newCart]
+		});
+		console.log(newCart, 'newCart');
+
+		// cart.forEach((item, index) => {
+		// const newCart = this.state.cart.map((item, i) =>
+		// 	item.id === attr.id ?
+		// 		isEqual(chosenAttributes, item.attributes) ?
+		// ({
+		// 	name: item.name,
+		// 	brand: item.brand,
+		// 	prices: item.prices,
+		// 	id: item.id,
+		// 	attributes: chosenAttributes,
+		// 	quantity: item.quantity + cartItem.quantity,
+		// 	gallery: item.gallery,
+		// 	allAttributes: allAttributes,
+		// }) :
+		// 			!isEqual(chosenAttributes, item.attributes) ?
+		// 				({
 		// 					name: item.name,
 		// 					brand: item.brand,
 		// 					prices: item.prices,
 		// 					id: item.id,
-		// 					attributes: newItem.attributes,
-		// 					quantity: item.quantity + newItem.quantity,
+		// 					attributes: item.attributes,
+		// 					quantity: item.quantity,
 		// 					gallery: item.gallery,
-		// 					allAttributes: newItem.allAttributes,
-		// 				};
-		// 				newCart.splice(i, 1, addquantity);
-		// 				this.setState({
-		// 					cart: [...newCart]
-		// 				});
-		// 			}
-		// 			if (!isEqual(item.attributes, newItem.attributes)) {
-		// 				if (i === i2) {
-		// 					this.setState({
-		// 						cart: [...newCart]
-		// 					});
-		// 				}
-		// 				else {
-		// 					// console.log(item.attributes, newItem.attributes, 'no');
-		// 					// newCart.splice(itemIndex, 1);
-		// 					this.setState({
-		// 						cart: [...newCart]
-		// 					});
-		// 				}
+		// 					allAttributes: item.allAttributes,
+		// 				})
+		// 				:
+		// 				[]
+		// 		:
+		// 		item
+		// ).flat();
+		// newCart.splice(itemIndex, 1);
+		// this.setState({ cart: [...newCart, ...cart.filter(item => item.id !== attr.id)] });
+		// newCart.splice(itemIndex)
 
-		// 			}
+		// console.log(newCart, 'newCart');
+
+		// if (newItem.length > 0 && index !== itemIndex) {
+		// 	// 	newItem[0].quantity += cartItem.quantity;
+		// 	// newCart.splice(index, 1,);
+		// 	// 	// newCart.splice(itemIndex, 1);
+		// 	newCart.splice(index, 1, {
+		// 		name: newItem[0].name,
+		// 		brand: newItem[0].brand,
+		// 		prices: newItem[0].prices,
+		// 		id: newItem[0].id,
+		// 		attributes: newItem[0].attributes,
+		// 		quantity: newItem[0].quantity + item.quantity,
+		// 		gallery: newItem[0].gallery,
+		// 		allAttributes: newItem[0].allAttributes,
+
+		// 	});
+		// 	// console.log(newCart, 'newCart');
+
+		// 	this.setState({
+		// 		cart: [...newCart]
+		// 	});
+		// 	// 	// 	console.log(newItem[0].attributes, 'done');
+		// } else {
+
+		// }
+		// }
+
+
+
+		// newCart.forEach((newItem, i2) => {
+		// 	if (isEqual(item.attributes, newItem.attributes) && i !== i2) {
+		// 		console.log(item.attributes, newItem.attributes, 'yes');
+		// 		newCart.splice(i, 1);
+		// 		const addquantity = {
+		// 			name: item.name,
+		// 			brand: item.brand,
+		// 			prices: item.prices,
+		// 			id: item.id,
+		// 			attributes: newItem.attributes,
+		// 			quantity: item.quantity + newItem.quantity,
+		// 			gallery: item.gallery,
+		// 			allAttributes: newItem.allAttributes,
+		// 		};
+		// 		newCart.splice(i, 1, addquantity);
+		// 		this.setState({
+		// 			cart: [...newCart]
+		// 		});
+		// 	}
+		// 	if (!isEqual(item.attributes, newItem.attributes)) {
+		// 		if (i === i2) {
+		// 			this.setState({
+		// 				cart: [...newCart]
+		// 			});
 		// 		}
-		// 		)
-		// 	);
+		// 		else {
+		// 			console.log(item.attributes, newItem.attributes, 'no');
+		// 			// newCart.splice(itemIndex, 1);
+		// 			this.setState({
+		// 				cart: [...newCart]
+		// 			});
+		// 		}
+
+		// 	}
+		// }
+		// )
+		// );
 		// }
 		// else {
 		// 	this.setState({
 		// 		cart: [...newCart]
 		// 	});
-		// }
+		// }				
+
 
 
 	};
