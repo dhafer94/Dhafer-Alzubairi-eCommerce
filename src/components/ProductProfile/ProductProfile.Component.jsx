@@ -249,7 +249,7 @@ class ProductProfile extends PureComponent {
 											  })
 											: parse(
 													description
-														.substring(0, 250)
+														.substring(0, 180)
 														.concat(`<span className=dots> .....</span>`),
 													{
 														trim: true,
