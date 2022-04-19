@@ -65,13 +65,7 @@ class CartOverlay extends PureComponent {
 						{`${cart.length ? cart.length : 'no'}`} items
 					</span>
 				</h2>
-				<div
-					id='cart-overlay'
-					className={
-						cart.length <= 1
-							? 'cart-overlay-items-main-container-mini'
-							: 'cart-overlay-items-main-container'
-					}>
+				<div id='cart-overlay' className='cart-overlay-items-main-container'>
 					{cart.length > 0
 						? cart.map(
 								(item, i) =>
@@ -142,12 +136,16 @@ class CartOverlay extends PureComponent {
 														-
 													</button>
 												</div>
-												<img
+												<div
 													id='cart-overlay'
-													src={item.gallery[0]}
-													className='cart-overlay-item-img'
-													alt={item.name}
-												/>
+													className='cart-overlay-item-img-container'>
+													<img
+														id='cart-overlay'
+														src={item.gallery[0]}
+														className='cart-overlay-item-img'
+														alt={item.name}
+													/>
+												</div>
 											</div>
 										</div>
 									),

@@ -2,7 +2,7 @@
 	background-color: #fff;
 	border: 1px solid #000;
 	position: absolute;
-	width: 325px;
+	min-width: 340px;
 	height: auto;
 	left: 61vw;
 	top: 78px;
@@ -23,15 +23,19 @@
 	& .cart-overlay-items-main-container {
 		overflow-y: scroll;
 		overflow-x: hidden;
-		height: 52vh;
+		height: 50vh;
+		padding-left: 15px;
+		padding-right: 15px;
 
 		& .cart-overlay-item-container {
 			display: flex;
 			flex-direction: row;
 			justify-content: space-between;
-			margin: 15px 15px;
-			width: 293px;
-			height: auto;
+			align-items: center;
+			margin-bottom: 20px;
+			max-width: 293px;
+			// height: auto;
+			// max-height: 140px;
 
 			.cart-overlay-item-left-container {
 				display: flex;
@@ -39,6 +43,7 @@
 				justify-content: space-between;
 				margin: 0;
 				padding: 0;
+				// height: 140px;
 
 				& .cart-overlay-item-title {
 					margin: 0;
@@ -46,8 +51,9 @@
 					font-size: 16px;
 				}
 				& .cart-overlay-item-price {
+					margin: 0;
 					margin-top: 5px;
-					margin-bottom: 25px;
+					margin-bottom: 10px;
 					font-weight: 500;
 					font-size: 16px;
 					line-height: 160%;
@@ -58,11 +64,13 @@
 				display: flex;
 				flex-direction: row;
 				width: 120px;
+				// height: 140px;
 
 				& .cart-overlay-item-mid-container {
 					display: flex;
 					flex-direction: column;
 					justify-content: space-between;
+					// height: 140px;
 
 					& .cart-overlay-item-quantity {
 						font-weight: 500;
@@ -81,19 +89,22 @@
 						align-items: center;
 					}
 				}
-
-				& .cart-overlay-item-img {
-					width: 105px;
-					height: 137px;
-					position: relative;
+				& .cart-overlay-item-img-container {
+					display: flex;
+					width: 120px;
+					// height: 140px;
 					margin-left: 10px;
+					align-items: center;
+
+					& .cart-overlay-item-img {
+						max-width: 105px;
+						max-height: 140px;
+						// height: 137px;
+						position: relative;
+					}
 				}
 			}
 		}
-	}
-	& .cart-overlay-items-main-container-mini {
-		@extend .cart-overlay-items-main-container;
-		height: 40vh;
 	}
 
 	& .cart-overlay-total-price-container {
