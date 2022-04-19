@@ -119,7 +119,7 @@ class CartOverlay extends PureComponent {
 														id={item.id}
 														name='increment'
 														onClick={(e) => handleIncrementDecrement(e, i)}
-														className='cart-overlay-item-attribute-increment-decrement'>
+														className='cart-overlay-item-attribute-increment'>
 														+
 													</button>
 
@@ -132,7 +132,7 @@ class CartOverlay extends PureComponent {
 														id={item.id}
 														name='decrement'
 														onClick={(e) => handleIncrementDecrement(e, i)}
-														className='cart-overlay-item-attribute-increment-decrement'>
+														className='cart-overlay-item-attribute-decrement'>
 														-
 													</button>
 												</div>

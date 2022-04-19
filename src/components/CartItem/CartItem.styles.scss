@@ -2,10 +2,12 @@
 	display: flex;
 	flex-direction: column;
 	flex-wrap: wrap;
+	// align-items: flex-end;
 
 	& .cart-overlay-item-attributes-container {
 		display: flex;
 		flex-direction: column;
+		// margin-bottom: 0;
 
 		& .cart-overlay-item-attributes-name {
 			margin: 0;
@@ -14,7 +16,6 @@
 		& .cart-overlay-item-attributes-container {
 			display: flex;
 			flex-direction: row;
-			margin-bottom: 5px;
 
 			& .cart-overlay-item-attribute-box-selected {
 				background: #fff;
@@ -43,8 +44,6 @@
 				opacity: 0.5;
 			}
 		}
-		@extend .cart-overlay-item-attributes-container;
-
 		& .cart-overlay-item-attribute-swatch-selected {
 			@extend .cart-overlay-item-attribute-box-selected;
 		}
