@@ -547,9 +547,7 @@ class App extends PureComponent {
 										<DataFetchedContext.Provider value={dataFetched}>
 											<CurrencyContext.Provider value={selectedCurrency}>
 												<CategoryProductsContext.Provider value={productsToBeShown}>
-													<div className={dropdown.cartOverlay === 'active' ? 'opacity' : 'normal'}>
-														<Outlet />
-													</div>
+													<Outlet />
 													<CartOverlay
 														dropdown={dropdown.cartOverlay}
 														handleIncrementDecrement={this.handleIncrementDecrement}
