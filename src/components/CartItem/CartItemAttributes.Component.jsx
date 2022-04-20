@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
-import './CartItem.styles.scss';
+import './CartItemAttributes.styles.scss';
 import { withRouter } from '../../withRouter';
 
-class CartItem extends PureComponent {
+class CartItemAttributes extends PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -135,4 +135,4 @@ class CartItem extends PureComponent {
 	}
 }
 
-export default withRouter(CartItem);
+export default withRouter(CartItemAttributes);

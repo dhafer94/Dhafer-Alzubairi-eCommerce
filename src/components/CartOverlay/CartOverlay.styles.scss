@@ -1,4 +1,4 @@
-.cart-overlay-bg {
+.cart-overlay {
 	position: fixed;
 	background-color: rgba(57, 55, 72, 0.22);
 	width: 100%;
@@ -6,18 +6,16 @@
 	top: 0;
 	left: 0;
 	display: flex;
-	justify-content: center;
-	align-items: center;
 
-	& .cart-overlay {
+	& .cart-overlay-inner {
 		background-color: #fff;
 		position: absolute;
 		min-width: 340px;
-		right: 15vw;
+		right: 240px;
 		top: 78px;
 		color: #1d1f22;
 		text-transform: capitalize;
-		height: 550px;
+		max-height: 630px;
 
 		& .cart-overlay-title {
 			margin: 10px 15px 25px;
@@ -31,28 +29,30 @@
 			}
 		}
 		& .cart-overlay-items-main-container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			margin: 0;
+			padding: 0;
 			overflow-y: scroll;
 			overflow-x: hidden;
-			height: 50vh;
-			padding-left: 15px;
+			max-height: 405px;
 
 			& .cart-overlay-item-container {
 				display: flex;
 				flex-direction: row;
 				justify-content: space-between;
-				// align-items: center;
 				position: relative;
-				margin-bottom: 40px;
-				max-width: 293px;
+				margin-bottom: 30px;
+				width: 300px;
 				max-height: 250px;
+				align-items: flex-end;
 
 				.cart-overlay-item-left-container {
 					position: relative;
-					align-self: flex-end;
-					// top: 0;
+
 					display: flex;
 					flex-direction: column;
-					justify-content: space-between;
 					margin: 0;
 					padding: 0;
 					height: 100%;
@@ -64,9 +64,7 @@
 						font-size: 16px;
 					}
 					& .cart-overlay-item-price {
-						margin: 0;
-						margin-top: 5px;
-						margin-bottom: 10px;
+						margin: 5px 0;
 						font-weight: 500;
 						font-size: 16px;
 						line-height: 160%;
@@ -99,7 +97,6 @@
 						}
 						& .cart-overlay-item-attribute-increment {
 							display: flex;
-							// align-self: center;
 							background: #fff;
 							border: 1px solid #1d1f22;
 							box-sizing: border-box;
@@ -111,6 +108,8 @@
 							align-items: center;
 							position: absolute;
 							top: 0;
+							// to be able to click them without being affected by the quantity text 'check height of quantity'
+							z-index: 2;
 						}
 						& .cart-overlay-item-attribute-decrement {
 							@extend .cart-overlay-item-attribute-increment;
@@ -121,10 +120,9 @@
 					& .cart-overlay-item-img-container {
 						display: flex;
 						width: 120px;
-						// height: 140px;
-						margin-left: 20px;
 						align-items: center;
 						max-height: 100%;
+						margin-left: 20px;
 
 						& .cart-overlay-item-img {
 							max-width: 100%;
@@ -134,38 +132,45 @@
 					}
 				}
 			}
+			& .cart-overlay-item-container:last-child {
+				margin-bottom: 2px;
+			}
 		}
 
 		& .cart-overlay-total-price-container {
+			padding-top: 28px;
 			display: flex;
 			flex-direction: row;
 			justify-content: space-between;
+			margin: 10px 25px 20px;
 
 			& .cart-overlay-total-price-text {
+				margin: 0;
 				font-family: 'Roboto';
 				font-style: normal;
 				font-weight: 500;
 				font-size: 16px;
 				line-height: 18px;
-				margin: 10px 15px 40px;
 			}
 			& .cart-overlay-total-price-amount {
-				margin: 10px 15px 40px;
-				/* $100.00 */
-
+				margin: 0;
 				width: 95px;
 				height: 26px;
-				// padding: 0;
 				font-family: 'Raleway';
 				font-style: normal;
 				font-weight: 700;
 				font-size: 16px;
 				line-height: 160%;
 				text-align: right;
-				/* identical to box height, or 26px */
 
 				color: #1d1f22;
 			}
+		}
+		& .cart-overlay-buttons {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-evenly;
+
 			& .cart-overlay-view-btn {
 				display: flex;
 				flex-direction: column;
@@ -183,19 +188,12 @@
 				background: #ffffff;
 				border: 1px solid #1d1f22;
 				box-sizing: border-box;
-
-				/* Inside auto layout */
-
 				flex: none;
 				order: 0;
 				flex-grow: 0;
-				margin: 0px 10px;
-
 				font-weight: 600;
 				font-size: 14px;
 				line-height: 120%;
-				/* identical to box height, or 17px */
-
 				display: flex;
 				align-items: center;
 				text-align: center;

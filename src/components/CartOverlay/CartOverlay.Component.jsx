@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import './CartOverlay.styles.scss';
-import CartItemComponent from '../CartItem/CartItem.Component';
+import CartItemAttributes from '../CartItem/CartItemAttributes.Component';
 import { NavLink } from 'react-router-dom';
 
 class CartOverlay extends PureComponent {
@@ -53,12 +53,14 @@ class CartOverlay extends PureComponent {
 		// console.log(allAttributes, 'allAttributes');
 
 		return dropdown === 'active' ? (
-			<div className={'cart-overlay-bg'}>
+			<div className={'cart-overlay'}>
 				<div
 					onClick={handleClicksForDropDown}
 					id='cart-overlay'
 					className={
-						dropdown === 'active' ? 'cart-overlay' : 'cart-overlay-invisible'
+						dropdown === 'active'
+							? 'cart-overlay-inner'
+							: 'cart-overlay-invisible'
 					}>
 					<h2 id='cart-overlay' className='cart-overlay-title'>
 						my Bag{' '}
@@ -100,7 +102,7 @@ class CartOverlay extends PureComponent {
 																	),
 														  )
 														: null}
-													<CartItemComponent
+													<CartItemAttributes
 														item={item}
 														allAttributes={item.allAttributes}
 														handleCartAttributesChange={
@@ -124,7 +126,6 @@ class CartOverlay extends PureComponent {
 															className='cart-overlay-item-attribute-increment'>
 															+
 														</button>
-
 														<p
 															id='cart-overlay'
 															className='cart-overlay-item-quantity'>
@@ -164,7 +165,7 @@ class CartOverlay extends PureComponent {
 							{totalPrice}
 						</p>
 					</div>
-					<div id='cart-overlay' className='cart-overlay-total-price-container'>
+					<div id='cart-overlay' className='cart-overlay-buttons'>
 						<NavLink className='cart-overlay-view-btn' to={`/cart`}>
 							view bag
 						</NavLink>
